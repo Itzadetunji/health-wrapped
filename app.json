@@ -1,48 +1,54 @@
 {
-	"expo": {
-		"name": "Health Wrapped",
-		"slug": "Health Wrapped",
-		"version": "1.0.0",
-		"orientation": "portrait",
-		"icon": "./assets/icon.png",
-		"userInterfaceStyle": "light",
-		"newArchEnabled": true,
-		"splash": {
-			"backgroundColor": "#121212",
-			"image": "./assets/splash-icon.png",
-			"resizeMode": "contain"
-		},
-		"ios": {
-			"supportsTablet": true,
-			"bundleIdentifier": "com.adetunji.healthwrapped",
-			"infoPlist": {
-				"NSHealthShareUsageDescription": "Read health data to track your progress.",
-				"NSHealthUpdateUsageDescription": "Update health data to track your progress."
-			},
-			"entitlements": {
-				"com.apple.developer.healthkit": true
-			}
-		},
-		"android": {
-			"adaptiveIcon": {
-				"foregroundImage": "./assets/adaptive-icon.png",
-				"backgroundColor": "#ffffff"
-			},
-			"edgeToEdgeEnabled": true,
-			"predictiveBackGestureEnabled": false,
-			"package": "com.adetunji.healthwrapped"
-		},
-		"plugins": [
-			[
-				"@kingstinct/react-native-healthkit",
-				{
-					"NSHealthShareUsageDescription": "Read health data to track your progress.",
-					"NSHealthUpdateUsageDescription": "Update health data to track your progress.",
-					"background": true
-				}
-			],
-			"expo-router",
-			"expo-build-properties"
-		]
-	}
+  "expo": {
+    "name": "Health Wrapped",
+    "slug": "health-wrapped",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "backgroundColor": "#121212",
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.adetunji.healthwrapped",
+      "infoPlist": {
+        "NSHealthShareUsageDescription": "Read health data to track your progress.",
+        "NSHealthUpdateUsageDescription": "Update health data to track your progress."
+      },
+      "entitlements": {
+        "com.apple.developer.healthkit": true
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "edgeToEdgeEnabled": true,
+      "predictiveBackGestureEnabled": false,
+      "package": "com.adetunji.healthwrapped"
+    },
+    "plugins": [
+      [
+        "@kingstinct/react-native-healthkit",
+        {
+          "NSHealthShareUsageDescription": "Read health data to track your progress.",
+          "NSHealthUpdateUsageDescription": "Update health data to track your progress.",
+          "background": true
+        }
+      ],
+      "expo-router",
+      "expo-build-properties"
+    ],
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "a515f677-9aa6-4381-a6c0-e6e05d48643c"
+      }
+    }
+  }
 }
