@@ -1,20 +1,20 @@
-import React, { useState } from "react";
+import { ChevronRight, Lock, Play, Settings } from "lucide-react-native";
+import type React from "react";
 import {
-	View,
-	Text,
-	StyleSheet,
-	TouchableOpacity,
-	ScrollView,
-	SafeAreaView,
 	Alert,
 	Image,
+	ScrollView,
+	StyleSheet,
+	Text,
+	TouchableOpacity,
+	View,
 } from "react-native";
-import { useHealth } from "../context/HealthContext";
-import { Settings, ChevronRight, Play, Lock } from "lucide-react-native";
 import {
 	SafeAreaProvider,
 	useSafeAreaInsets,
 } from "react-native-safe-area-context";
+import { useHealth } from "../context/HealthContext";
+import { tellUserToEnableHealthPermissions } from "../hooks/useHealthData";
 
 interface LandingScreenProps {
 	onViewWrapped: () => void;
@@ -39,6 +39,16 @@ export const LandingScreen: React.FC<LandingScreenProps> = ({
 		}
 		setSelectedYear(year);
 		await fetchDataForYear(year);
+	};
+
+	const handleViewWrapped = async () => {
+		const data = await fetchDataForYear(selectedYear);
+
+		if (selectedYear === currentYear && !data?.steps) {
+			return tellUserToEnableHealthPermissions();
+		}
+
+		onViewWrapped();
 	};
 
 	return (
@@ -103,7 +113,7 @@ export const LandingScreen: React.FC<LandingScreenProps> = ({
 				<View style={styles.grid}>
 					<TouchableOpacity
 						style={styles.card}
-						onPress={onViewWrapped}
+						onPress={handleViewWrapped}
 					>
 						<View style={styles.cardContent}>
 							<View style={styles.iconContainer}>

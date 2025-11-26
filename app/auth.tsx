@@ -9,6 +9,8 @@ import {
 	View,
 } from "react-native";
 import { useHealth } from "../context/HealthContext";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { storeData } from "../lib/utils";
 
 export default function Auth() {
 	const router = useRouter();
@@ -19,8 +21,6 @@ export default function Auth() {
 	const scaleAnim = useRef(new Animated.Value(1)).current;
 
 	useEffect(() => {
-		authenticate();
-
 		Animated.loop(
 			Animated.sequence([
 				Animated.timing(scaleAnim, {
@@ -41,6 +41,10 @@ export default function Auth() {
 		setLoading(true);
 		setError(null);
 		const success = await authenticate();
+
+		const hasAuthenticated = JSON.stringify({ value: true });
+		await storeData("AUTHENTICATED_FIRST_TIME", hasAuthenticated);
+
 		setLoading(false);
 
 		if (success) {

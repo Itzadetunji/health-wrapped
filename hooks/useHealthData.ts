@@ -5,6 +5,7 @@ import HealthKit, {
 	type QuantityTypeIdentifier,
 	type CategoryTypeIdentifier,
 } from "@kingstinct/react-native-healthkit";
+import { Alert, Linking } from "react-native";
 
 export interface HealthData {
 	steps: number;
@@ -170,4 +171,23 @@ export const useHealthData = () => {
 	};
 
 	return { data, loading, authorized, authenticate };
+};
+
+export const tellUserToEnableHealthPermissions = () => {
+	Alert.alert(
+		"No Health Data Found",
+		"We couldn't find any steps data for this year. Please grant permission in Settings:\n\nSettings > Health > Data Access & Devices > Health Wrapped > Turn On All. \n\nRestart the app after enabling permissions.",
+		[
+			{
+				text: "Open Settings",
+				onPress: () => {
+					// Opens the Health app
+					Linking.openSettings().catch(() => {
+						Alert.alert("Error", "Could not open Settings");
+					});
+				},
+			},
+		],
+	);
+	return false;
 };

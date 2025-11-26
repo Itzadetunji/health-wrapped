@@ -1,14 +1,12 @@
 import React, { useEffect, useRef } from "react";
 import {
-	View,
-	Text,
-	StyleSheet,
 	Animated,
 	Dimensions,
 	Image,
+	StyleSheet,
+	Text,
+	View,
 } from "react-native";
-
-const { width, height } = Dimensions.get("window");
 
 export const SplashScreen = ({ onFinish }: { onFinish: () => void }) => {
 	const fadeAnim = useRef(new Animated.Value(0)).current;

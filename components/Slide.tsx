@@ -1,6 +1,7 @@
-import React, { useEffect, useRef, useState } from "react";
-import { View, Text, StyleSheet, Animated, Dimensions } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
+import type React from "react";
+import { useEffect, useRef, useState } from "react";
+import { Animated, Dimensions, StyleSheet, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const { width, height } = Dimensions.get("window");

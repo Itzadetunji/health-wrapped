@@ -1,17 +1,18 @@
-import React, {
+import HealthKit, {
+	type CategoryTypeIdentifier,
+	CategoryValueSleepAnalysis,
+	type QuantityTypeIdentifier,
+	requestAuthorization,
+} from "@kingstinct/react-native-healthkit";
+import {
 	createContext,
+	type Dispatch,
+	type ReactNode,
+	type SetStateAction,
 	useContext,
 	useState,
-	ReactNode,
-	SetStateAction,
-	Dispatch,
 } from "react";
-import HealthKit, {
-	CategoryValueSleepAnalysis,
-	requestAuthorization,
-	type QuantityTypeIdentifier,
-	type CategoryTypeIdentifier,
-} from "@kingstinct/react-native-healthkit";
+import { Alert } from "react-native";
 
 export interface HealthData {
 	steps: number;
@@ -30,7 +31,7 @@ interface HealthContextType {
 	selectedYear: number;
 	setSelectedYear: Dispatch<SetStateAction<number>>;
 	authenticate: () => Promise<boolean>;
-	fetchDataForYear: (year: number) => Promise<void>;
+	fetchDataForYear: (year: number) => Promise<HealthData | null>;
 	togglePro: () => void;
 }
 
@@ -54,7 +55,7 @@ export const HealthProvider = ({ children }: { children: ReactNode }) => {
 
 	const togglePro = () => setIsPro((prev) => !prev);
 
-	const fetchDataForYear = async (year: number) => {
+	const fetchDataForYear = async (year: number): Promise<HealthData | null> => {
 		setLoading(true);
 		const startDate = new Date(year, 0, 1);
 		const endDate = new Date(year, 11, 31, 23, 59, 59);
@@ -159,16 +160,20 @@ export const HealthProvider = ({ children }: { children: ReactNode }) => {
 			});
 			const sleep = totalSleepMinutes / 60; // Hours
 
-			setData({
+			const newData = {
 				steps,
 				swimDistance,
 				calories,
 				sleep,
 				flights,
 				exercise,
-			});
+			};
+
+			setData(newData);
+			return newData;
 		} catch (e) {
 			console.error("Error fetching health data", e);
+			return null;
 		} finally {
 			setLoading(false);
 		}
@@ -192,11 +197,18 @@ export const HealthProvider = ({ children }: { children: ReactNode }) => {
 			const isAuthorized = await requestAuthorization({
 				toRead: readPermissions,
 			});
-			console.log(isAuthorized);
+
 			setAuthorized(isAuthorized);
 
 			if (isAuthorized) {
-				await fetchDataForYear(new Date().getFullYear());
+				const fetchedData = await fetchDataForYear(new Date().getFullYear());
+				if (fetchedData && fetchedData.steps === 0) {
+					Alert.alert(
+						"No Health Data Found",
+						"We couldn't find any steps data for this year. Please ensure you have granted 'Steps' permission in Health settings.\n\nGo to Settings > Health > Data Access & Devices > Health Wrapped > Turn On All",
+						[{ text: "OK" }]
+					);
+				}
 			}
 			return isAuthorized;
 		} catch (e) {

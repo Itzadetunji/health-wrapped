@@ -10,6 +10,7 @@
 	},
 	"dependencies": {
 		"@kingstinct/react-native-healthkit": "^12.1.1",
+		"@react-native-async-storage/async-storage": "^2.2.0",
 		"expo": "~54.0.25",
 		"expo-apple-authentication": "~8.0.7",
 		"expo-build-properties": "~1.0.9",
