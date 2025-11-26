@@ -1,7 +1,7 @@
 {
 	"expo": {
-		"name": "health-wrapped",
-		"slug": "health-wrapped",
+		"name": "Health Wrapped",
+		"slug": "Health Wrapped",
 		"version": "1.0.0",
 		"orientation": "portrait",
 		"icon": "./assets/icon.png",
@@ -37,10 +37,12 @@
 				"@kingstinct/react-native-healthkit",
 				{
 					"NSHealthShareUsageDescription": "Read health data to track your progress.",
-					"NSHealthUpdateUsageDescription": "Update health data to track your progress."
+					"NSHealthUpdateUsageDescription": "Update health data to track your progress.",
+					"background": true
 				}
 			],
-			"expo-router"
+			"expo-router",
+			"expo-build-properties"
 		]
 	}
 }

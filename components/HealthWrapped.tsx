@@ -1,32 +1,32 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useRouter } from "expo-router";
 import {
-	View,
-	StyleSheet,
-	TouchableWithoutFeedback,
-	Dimensions,
-	SafeAreaView,
-	StatusBar,
+	ArrowUp,
+	Dumbbell,
+	Flame,
+	Footprints,
+	Moon,
+	Waves,
+	X,
+} from "lucide-react-native";
+import type React from "react";
+import { useEffect, useRef, useState } from "react";
+import {
 	Animated,
+	Dimensions,
+	StatusBar,
+	StyleSheet,
 	Text,
 	TouchableOpacity,
+	TouchableWithoutFeedback,
+	View,
 } from "react-native";
 import {
 	SafeAreaProvider,
 	useSafeAreaInsets,
 } from "react-native-safe-area-context";
-import { HealthData, useHealth } from "../context/HealthContext";
+import { type HealthData, useHealth } from "../context/HealthContext";
 import { Slide } from "./Slide";
 import { SummarySlide } from "./SummarySlide";
-import {
-	Footprints,
-	Waves,
-	Flame,
-	Moon,
-	ArrowUp,
-	Dumbbell,
-	X,
-} from "lucide-react-native";
-import { useRouter } from "expo-router";
 
 const { width } = Dimensions.get("window");
 const SLIDE_DURATION = 10000; // 10 seconds
@@ -234,7 +234,7 @@ export const HealthWrapped: React.FC<HealthWrappedProps> = ({ data }) => {
 	};
 
 	const handleClose = () => {
-		router.back();
+		router.push("/landing");
 	};
 
 	const currentSlide = slides[currentIndex];
@@ -244,7 +244,7 @@ export const HealthWrapped: React.FC<HealthWrappedProps> = ({ data }) => {
 			<StatusBar barStyle="light-content" />
 
 			{/* Progress Bars and Header */}
-			<View style={[styles.progressContainer, { marginTop: insets.top }]}>
+			<View style={[styles.progressContainer, { marginTop: insets.top + 20 }]}>
 				<View style={[styles.progressContent]}>
 					<View style={styles.progressBars}>
 						{slides.map((slide, index) => (

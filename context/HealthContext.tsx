@@ -192,6 +192,7 @@ export const HealthProvider = ({ children }: { children: ReactNode }) => {
 			const isAuthorized = await requestAuthorization({
 				toRead: readPermissions,
 			});
+			console.log(isAuthorized);
 			setAuthorized(isAuthorized);
 
 			if (isAuthorized) {

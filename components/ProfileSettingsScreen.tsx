@@ -1,15 +1,11 @@
-import React from "react";
+import { ChevronLeft, Crown } from "lucide-react-native";
+import type React from "react";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import {
-	View,
-	Text,
-	StyleSheet,
-	TouchableOpacity,
-	SafeAreaView,
-	Alert,
-	Switch,
-} from "react-native";
+	SafeAreaProvider,
+	useSafeAreaInsets,
+} from "react-native-safe-area-context";
 import { useHealth } from "../context/HealthContext";
-import { ChevronLeft, Trash2, Crown } from "lucide-react-native";
 
 interface ProfileSettingsScreenProps {
 	onBack: () => void;
@@ -19,24 +15,10 @@ export const ProfileSettingsScreen: React.FC<ProfileSettingsScreenProps> = ({
 	onBack,
 }) => {
 	const { isPro, togglePro } = useHealth();
-
-	const handleDeleteAccount = () => {
-		Alert.alert(
-			"Delete Account",
-			"Are you sure you want to delete your account? This action cannot be undone.",
-			[
-				{ text: "Cancel", style: "cancel" },
-				{
-					text: "Delete",
-					style: "destructive",
-					onPress: () => console.log("Account deleted"),
-				},
-			]
-		);
-	};
+	const insets = useSafeAreaInsets();
 
 	return (
-		<SafeAreaView style={styles.container}>
+		<SafeAreaProvider style={[styles.container, { paddingTop: insets.top }]}>
 			<View style={styles.header}>
 				<TouchableOpacity
 					onPress={onBack}
@@ -84,20 +66,8 @@ export const ProfileSettingsScreen: React.FC<ProfileSettingsScreenProps> = ({
 				</View>
 
 				<View style={styles.spacer} />
-
-				<TouchableOpacity
-					style={styles.deleteButton}
-					onPress={handleDeleteAccount}
-				>
-					<Trash2
-						color="#FF6B6B"
-						size={20}
-						style={{ marginRight: 10 }}
-					/>
-					<Text style={styles.deleteButtonText}>Delete Account</Text>
-				</TouchableOpacity>
 			</View>
-		</SafeAreaView>
+		</SafeAreaProvider>
 	);
 };
 
@@ -181,20 +151,5 @@ const styles = StyleSheet.create({
 	},
 	spacer: {
 		flex: 1,
-	},
-	deleteButton: {
-		flexDirection: "row",
-		alignItems: "center",
-		justifyContent: "center",
-		backgroundColor: "rgba(255, 107, 107, 0.1)",
-		paddingVertical: 16,
-		borderRadius: 30, // Rounded corner button
-		borderWidth: 1,
-		borderColor: "rgba(255, 107, 107, 0.3)",
-	},
-	deleteButtonText: {
-		color: "#FF6B6B",
-		fontWeight: "bold",
-		fontSize: 16,
 	},
 });

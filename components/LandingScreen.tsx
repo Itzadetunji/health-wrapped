@@ -11,6 +11,10 @@ import {
 } from "react-native";
 import { useHealth } from "../context/HealthContext";
 import { Settings, ChevronRight, Play, Lock } from "lucide-react-native";
+import {
+	SafeAreaProvider,
+	useSafeAreaInsets,
+} from "react-native-safe-area-context";
 
 interface LandingScreenProps {
 	onViewWrapped: () => void;
@@ -21,9 +25,10 @@ export const LandingScreen: React.FC<LandingScreenProps> = ({
 	onViewWrapped,
 	onOpenSettings,
 }) => {
+	const currentYear = new Date().getFullYear();
 	const { isPro, fetchDataForYear, selectedYear, setSelectedYear } =
 		useHealth();
-	const currentYear = new Date().getFullYear();
+	const insets = useSafeAreaInsets();
 
 	const years = Array.from({ length: 5 }, (_, i) => currentYear - i);
 
@@ -37,7 +42,7 @@ export const LandingScreen: React.FC<LandingScreenProps> = ({
 	};
 
 	return (
-		<SafeAreaView style={styles.container}>
+		<SafeAreaProvider style={[styles.container, { paddingTop: insets.top }]}>
 			<View style={styles.header}>
 				<View style={styles.headerLeft}>
 					<Image
@@ -120,7 +125,7 @@ export const LandingScreen: React.FC<LandingScreenProps> = ({
 					</TouchableOpacity>
 				</View>
 			</ScrollView>
-		</SafeAreaView>
+		</SafeAreaProvider>
 	);
 };
 

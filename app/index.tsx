@@ -6,7 +6,7 @@ export default function Index() {
 	const router = useRouter();
 
 	const handleFinish = () => {
-		router.replace("/login");
+		router.replace("/auth");
 	};
 
 	return <SplashScreen onFinish={handleFinish} />;
