@@ -3,7 +3,7 @@
 		"name": "Health Wrapped",
 		"slug": "health-wrapped",
 		"scheme": "healthwrapped",
-		"version": "1.0.3",
+		"version": "1.0.4",
 		"orientation": "portrait",
 		"icon": "./assets/icon.png",
 		"userInterfaceStyle": "light",
@@ -42,7 +42,8 @@
 				}
 			],
 			"expo-router",
-			"expo-build-properties"
+			"expo-build-properties",
+			"expo-quick-actions"
 		],
 		"extra": {
 			"router": {},

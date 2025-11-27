@@ -1,12 +1,28 @@
+import * as QuickActions from "expo-quick-actions";
+import { useQuickActionRouting } from "expo-quick-actions/router";
 import { Stack } from "expo-router";
-import { HealthProvider } from "../context/HealthContext";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
+import { HealthProvider } from "../context/HealthContext";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 export default function Layout() {
+	useQuickActionRouting();
+
+	useEffect(() => {
+		QuickActions.setItems([
+			{
+				title: "Wait! Don't Delete Me",
+				subtitle: " I promise I'll be good!",
+				id: "dont_delete",
+				icon: "pause",
+				params: { href: "/" },
+			},
+		]);
+	}, []);
+
 	useEffect(() => {
 		// Hide the splash screen after the app is mounted.
 		// In a real app, you might wait for fonts or other assets here.
