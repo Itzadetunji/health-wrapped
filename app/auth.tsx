@@ -42,8 +42,7 @@ export default function Auth() {
 		setError(null);
 		const success = await authenticate();
 
-		const hasAuthenticated = { value: true };
-		await storeData("AUTHENTICATED_FIRST_TIME", hasAuthenticated);
+		await storeData("AUTHENTICATED_FIRST_TIME", { value: true });
 
 		setLoading(false);
 

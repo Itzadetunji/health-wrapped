@@ -10,9 +10,9 @@ export default function Index() {
 		const storedAuthenticatedFirstTime = await getData(
 			"AUTHENTICATED_FIRST_TIME"
 		);
-		const hasAuthenticatedBefore = storedAuthenticatedFirstTime
-			? storedAuthenticatedFirstTime
-			: { value: false };
+		const hasAuthenticatedBefore = storedAuthenticatedFirstTime ?? {
+			value: false,
+		};
 
 		if (!hasAuthenticatedBefore.value) {
 			router.replace("/auth");
