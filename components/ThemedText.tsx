@@ -9,7 +9,12 @@ export function ThemedText({
 	variant = "default",
 	...props
 }: ThemedTextProps) {
-	return <Text style={[styles[variant], style]} {...props} />;
+	return (
+		<Text
+			style={[styles[variant], style]}
+			{...props}
+		/>
+	);
 }
 
 const styles = StyleSheet.create({

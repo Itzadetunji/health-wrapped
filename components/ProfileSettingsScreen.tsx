@@ -56,9 +56,7 @@ export const ProfileSettingsScreen: React.FC<ProfileSettingsScreenProps> = ({
 							</ThemedText>
 						</View>
 					</View>
-					<ThemedText
-						style={styles.proDescription}
-					>
+					<ThemedText style={styles.proDescription}>
 						Unlock access to all your historical health data and premium
 						insights.
 					</ThemedText>
