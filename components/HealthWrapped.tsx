@@ -13,6 +13,7 @@ import { useEffect, useRef, useState } from "react";
 import {
 	Animated,
 	Dimensions,
+	type GestureResponderEvent,
 	StatusBar,
 	StyleSheet,
 	Text,
@@ -29,7 +30,7 @@ import { Slide } from "./Slide";
 import { SummarySlide } from "./SummarySlide";
 
 const { width } = Dimensions.get("window");
-const SLIDE_DURATION = 10000; // 10 seconds
+const SLIDE_DURATION = 5000; // 5 seconds
 
 interface HealthWrappedProps {
 	data: HealthData;
@@ -40,6 +41,7 @@ interface ProgressBarProps {
 	currentIndex: number;
 	duration: number;
 	onFinish: () => void;
+	isPaused: boolean;
 }
 
 const ProgressBar: React.FC<ProgressBarProps> = ({
@@ -47,28 +49,60 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
 	currentIndex,
 	duration,
 	onFinish,
+	isPaused,
 }) => {
 	const progress = useRef(new Animated.Value(0)).current;
+	const currentProgress = useRef(0);
+
+	useEffect(() => {
+		const listener = progress.addListener(({ value }) => {
+			currentProgress.current = value;
+		});
+		return () => {
+			progress.removeListener(listener);
+		};
+	}, [progress]);
 
 	useEffect(() => {
 		if (index === currentIndex) {
 			progress.setValue(0);
-			Animated.timing(progress, {
-				toValue: 1,
-				duration: duration,
-				useNativeDriver: false,
-			}).start(({ finished }) => {
-				if (finished) {
-					onFinish();
-				}
-			});
+			currentProgress.current = 0;
+		}
+	}, [currentIndex, index, progress]);
+
+	useEffect(() => {
+		if (index === currentIndex) {
+			if (isPaused) {
+				progress.stopAnimation((value) => {
+					currentProgress.current = value;
+				});
+			} else {
+				const startValue = currentProgress.current;
+				if (startValue >= 1) return;
+
+				const remainingDuration = duration * (1 - startValue);
+
+				Animated.timing(progress, {
+					toValue: 1,
+					duration: remainingDuration,
+					useNativeDriver: false,
+				}).start(({ finished }) => {
+					if (finished) {
+						onFinish();
+					}
+				});
+			}
 		} else if (index < currentIndex) {
 			progress.setValue(1);
+			currentProgress.current = 1;
+			progress.stopAnimation();
 		} else {
 			progress.setValue(0);
+			currentProgress.current = 0;
+			progress.stopAnimation();
 		}
 		return () => progress.stopAnimation();
-	}, [currentIndex, index, duration, onFinish]);
+	}, [currentIndex, index, duration, onFinish, isPaused, progress]);
 
 	const widthInterpolated = progress.interpolate({
 		inputRange: [0, 1],
@@ -95,7 +129,7 @@ type SlideData = {
 	title: string;
 	value: number;
 	statLabel: string;
-	gradientColors: string[];
+	gradientColors: [string, string, ...string[]];
 	icon: React.ReactNode;
 	quote: string;
 	bottomStat: string;
@@ -111,6 +145,7 @@ type SlideItem = SlideData | SummarySlideData;
 
 export const HealthWrapped: React.FC<HealthWrappedProps> = ({ data }) => {
 	const [currentIndex, setCurrentIndex] = useState(0);
+	const [isPaused, setIsPaused] = useState(false);
 	const router = useRouter();
 	const insets = useSafeAreaInsets();
 	const { selectedYear } = useHealth();
@@ -224,7 +259,7 @@ export const HealthWrapped: React.FC<HealthWrappedProps> = ({ data }) => {
 		}
 	};
 
-	const handlePress = (evt: any) => {
+	const handlePress = (evt: GestureResponderEvent) => {
 		const locationX = evt.nativeEvent.locationX;
 		if (locationX < width / 3) {
 			handlePrev();
@@ -245,7 +280,7 @@ export const HealthWrapped: React.FC<HealthWrappedProps> = ({ data }) => {
 
 			{/* Progress Bars and Header */}
 			<View style={[styles.progressContainer, { marginTop: insets.top + 20 }]}>
-				<View style={[styles.progressContent]}>
+				<View style={styles.progressContent}>
 					<View style={styles.progressBars}>
 						{slides.map((slide, index) => (
 							<ProgressBar
@@ -258,6 +293,7 @@ export const HealthWrapped: React.FC<HealthWrappedProps> = ({ data }) => {
 										handleNext();
 									}
 								}}
+								isPaused={isPaused}
 							/>
 						))}
 					</View>
@@ -276,8 +312,14 @@ export const HealthWrapped: React.FC<HealthWrappedProps> = ({ data }) => {
 				</View>
 			</View>
 
-			<TouchableWithoutFeedback onPress={handlePress}>
-				<View style={[styles.slideContainer]}>
+			<TouchableWithoutFeedback
+				onPress={handlePress}
+				onPressIn={() => setIsPaused(true)}
+				onPressOut={() => setIsPaused(false)}
+				onLongPress={() => {}}
+				delayLongPress={200}
+			>
+				<View style={styles.slideContainer}>
 					{currentSlide.isSummary ? (
 						<SummarySlide
 							data={data}

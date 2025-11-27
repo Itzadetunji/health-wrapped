@@ -15,6 +15,7 @@ export const SummarySlide: React.FC<SummarySlideProps> = ({
 	isActive,
 }) => {
 	const fadeAnim = useRef(new Animated.Value(0)).current;
+	const pulseAnim = useRef(new Animated.Value(0)).current;
 	const { selectedYear } = useHealth();
 
 	useEffect(() => {
@@ -24,14 +25,36 @@ export const SummarySlide: React.FC<SummarySlideProps> = ({
 				duration: 1000,
 				useNativeDriver: true,
 			}).start();
+
+			Animated.loop(
+				Animated.sequence([
+					Animated.timing(pulseAnim, {
+						toValue: 1,
+						duration: 4000,
+						useNativeDriver: true,
+					}),
+					Animated.timing(pulseAnim, {
+						toValue: 0,
+						duration: 4000,
+						useNativeDriver: true,
+					}),
+				])
+			).start();
 		}
 	}, [isActive]);
 
 	return (
-		<LinearGradient
-			colors={["#121212", "#2C3E50"]}
-			style={styles.container}
-		>
+		<View style={styles.container}>
+			<LinearGradient colors={["#121212", "#2C3E50"]} />
+			<Animated.View style={[StyleSheet.absoluteFill, { opacity: pulseAnim }]}>
+				<LinearGradient
+					colors={["#121212", "#2C3E50"]}
+					style={StyleSheet.absoluteFill}
+					start={{ x: 0.5, y: 0 }}
+					end={{ x: 0.5, y: 1 }}
+				/>
+			</Animated.View>
+
 			<Animated.View style={{ opacity: fadeAnim, width: "100%", padding: 30 }}>
 				<View style={styles.headerContainer}>
 					<Text style={styles.headerText}>{selectedYear} WRAPPED</Text>
@@ -76,7 +99,7 @@ export const SummarySlide: React.FC<SummarySlideProps> = ({
 
 				<Text style={styles.footer}>See you next year!</Text>
 			</Animated.View>
-		</LinearGradient>
+		</View>
 	);
 };
 

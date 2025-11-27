@@ -34,6 +34,7 @@ export const Slide: React.FC<SlideProps> = ({
 	const fadeAnim = useRef(new Animated.Value(0)).current;
 	const [displayValue, setDisplayValue] = useState(0);
 	const countAnim = useRef(new Animated.Value(0)).current;
+	const pulseAnim = useRef(new Animated.Value(0)).current;
 
 	const insets = useSafeAreaInsets();
 
@@ -56,6 +57,21 @@ export const Slide: React.FC<SlideProps> = ({
 					useNativeDriver: false,
 				}),
 			]).start();
+
+			Animated.loop(
+				Animated.sequence([
+					Animated.timing(pulseAnim, {
+						toValue: 1,
+						duration: 4000,
+						useNativeDriver: true,
+					}),
+					Animated.timing(pulseAnim, {
+						toValue: 0,
+						duration: 4000,
+						useNativeDriver: true,
+					}),
+				])
+			).start();
 		}
 	}, [isActive, value]);
 
@@ -69,10 +85,17 @@ export const Slide: React.FC<SlideProps> = ({
 	}, []);
 
 	return (
-		<LinearGradient
-			colors={gradientColors}
-			style={[styles.container, { paddingTop: insets.top + 40 }]}
-		>
+		<View style={[styles.container, { paddingTop: insets.top + 40 }]}>
+			<LinearGradient colors={gradientColors} />
+			<Animated.View style={[StyleSheet.absoluteFill, { opacity: pulseAnim }]}>
+				<LinearGradient
+					colors={gradientColors}
+					style={StyleSheet.absoluteFill}
+					start={{ x: 0.2, y: 0.2 }}
+					end={{ x: 0.8, y: 0.8 }}
+				/>
+			</Animated.View>
+
 			<Animated.View
 				style={{
 					opacity: fadeAnim,
@@ -100,7 +123,7 @@ export const Slide: React.FC<SlideProps> = ({
 					)}
 				</View>
 			</Animated.View>
-		</LinearGradient>
+		</View>
 	);
 };
 
