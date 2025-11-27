@@ -5,7 +5,6 @@ import {
 	Image,
 	ScrollView,
 	StyleSheet,
-	Text,
 	TouchableOpacity,
 	View,
 } from "react-native";
@@ -15,6 +14,7 @@ import {
 } from "react-native-safe-area-context";
 import { useHealth } from "../context/HealthContext";
 import { tellUserToEnableHealthPermissions } from "../hooks/useHealthData";
+import { ThemedText } from "./ThemedText";
 
 interface LandingScreenProps {
 	onViewWrapped: () => void;
@@ -59,7 +59,12 @@ export const LandingScreen: React.FC<LandingScreenProps> = ({
 						source={require("../assets/icon.png")}
 						style={styles.logo}
 					/>
-					<Text style={styles.greeting}>Welcome Back</Text>
+					<ThemedText
+						variant="bold"
+						style={styles.greeting}
+					>
+						Welcome Back
+					</ThemedText>
 				</View>
 				<TouchableOpacity
 					onPress={onOpenSettings}
@@ -73,7 +78,12 @@ export const LandingScreen: React.FC<LandingScreenProps> = ({
 			</View>
 
 			<ScrollView contentContainerStyle={styles.scrollContent}>
-				<Text style={styles.sectionTitle}>Select Year</Text>
+				<ThemedText
+					variant="semibold"
+					style={styles.sectionTitle}
+				>
+					Select Year
+				</ThemedText>
 				<ScrollView
 					horizontal
 					showsHorizontalScrollIndicator={false}
@@ -89,7 +99,8 @@ export const LandingScreen: React.FC<LandingScreenProps> = ({
 							]}
 							onPress={() => handleYearSelect(year)}
 						>
-							<Text
+							<ThemedText
+								variant="semibold"
 								style={[
 									styles.yearText,
 									selectedYear === year && styles.yearTextActive,
@@ -97,7 +108,7 @@ export const LandingScreen: React.FC<LandingScreenProps> = ({
 								]}
 							>
 								{year}
-							</Text>
+							</ThemedText>
 							{year !== currentYear && !isPro && (
 								<Lock
 									size={12}
@@ -109,7 +120,12 @@ export const LandingScreen: React.FC<LandingScreenProps> = ({
 					))}
 				</ScrollView>
 
-				<Text style={styles.sectionTitle}>Your Wrapped</Text>
+				<ThemedText
+					variant="semibold"
+					style={styles.sectionTitle}
+				>
+					Your Wrapped
+				</ThemedText>
 				<View style={styles.grid}>
 					<TouchableOpacity
 						style={styles.card}
@@ -124,8 +140,18 @@ export const LandingScreen: React.FC<LandingScreenProps> = ({
 								/>
 							</View>
 							<View>
-								<Text style={styles.cardTitle}>{selectedYear} Wrapped</Text>
-								<Text style={styles.cardSubtitle}>View your health story</Text>
+								<ThemedText
+									variant="bold"
+									style={styles.cardTitle}
+								>
+									{selectedYear} Wrapped
+								</ThemedText>
+								<ThemedText
+									variant="default"
+									style={styles.cardSubtitle}
+								>
+									View your health story
+								</ThemedText>
 							</View>
 						</View>
 						<ChevronRight
@@ -163,7 +189,6 @@ const styles = StyleSheet.create({
 	},
 	greeting: {
 		fontSize: 28,
-		fontWeight: "bold",
 		color: "white",
 	},
 	settingsButton: {
@@ -176,7 +201,6 @@ const styles = StyleSheet.create({
 	},
 	sectionTitle: {
 		fontSize: 18,
-		fontWeight: "600",
 		color: "#888",
 		marginLeft: 20,
 		marginBottom: 15,
@@ -203,7 +227,6 @@ const styles = StyleSheet.create({
 	},
 	yearText: {
 		color: "#888",
-		fontWeight: "600",
 	},
 	yearTextActive: {
 		color: "#000",
@@ -238,7 +261,6 @@ const styles = StyleSheet.create({
 	},
 	cardTitle: {
 		fontSize: 18,
-		fontWeight: "bold",
 		color: "white",
 		marginBottom: 4,
 	},

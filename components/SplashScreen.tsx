@@ -1,12 +1,6 @@
 import React, { useEffect, useRef } from "react";
-import {
-	Animated,
-	Dimensions,
-	Image,
-	StyleSheet,
-	Text,
-	View,
-} from "react-native";
+import { Animated, Image, StyleSheet, View } from "react-native";
+import { ThemedText } from "./ThemedText";
 
 export const SplashScreen = ({ onFinish }: { onFinish: () => void }) => {
 	const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -29,7 +23,7 @@ export const SplashScreen = ({ onFinish }: { onFinish: () => void }) => {
 				onFinish();
 			}, 2000);
 		});
-	}, []);
+	}, [fadeAnim, scaleAnim, onFinish]);
 
 	return (
 		<View style={styles.container}>
@@ -43,8 +37,13 @@ export const SplashScreen = ({ onFinish }: { onFinish: () => void }) => {
 					source={require("../assets/icon.png")}
 					style={styles.logo}
 				/>
-				<Text style={styles.title}>HealthWrapped</Text>
-				<Text style={styles.tagline}>Yearly Stories</Text>
+				<ThemedText
+					variant="bold"
+					style={styles.title}
+				>
+					HealthWrapped
+				</ThemedText>
+				<ThemedText style={styles.tagline}>Yearly Stories</ThemedText>
 			</Animated.View>
 		</View>
 	);
@@ -68,7 +67,6 @@ const styles = StyleSheet.create({
 	},
 	title: {
 		fontSize: 32,
-		fontWeight: "bold",
 		color: "white",
 		marginBottom: 10,
 	},

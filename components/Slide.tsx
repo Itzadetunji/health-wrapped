@@ -1,8 +1,9 @@
 import { LinearGradient } from "expo-linear-gradient";
 import type React from "react";
 import { useEffect, useRef, useState } from "react";
-import { Animated, Dimensions, StyleSheet, Text, View } from "react-native";
+import { Animated, Dimensions, StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { ThemedText } from "./ThemedText";
 
 const { width, height } = Dimensions.get("window");
 
@@ -73,7 +74,7 @@ export const Slide: React.FC<SlideProps> = ({
 				])
 			).start();
 		}
-	}, [isActive, value]);
+	}, [isActive, value, fadeAnim, countAnim, pulseAnim]);
 
 	useEffect(() => {
 		const listener = countAnim.addListener(({ value }) => {
@@ -82,7 +83,7 @@ export const Slide: React.FC<SlideProps> = ({
 		return () => {
 			countAnim.removeListener(listener);
 		};
-	}, []);
+	}, [countAnim]);
 
 	return (
 		<View style={[styles.container, { paddingTop: insets.top + 40 }]}>
@@ -107,18 +108,43 @@ export const Slide: React.FC<SlideProps> = ({
 				<View style={styles.contentContainer}>
 					<View style={styles.iconCircle}>{icon}</View>
 
-					<Text style={styles.title}>{title}</Text>
-					<Text style={styles.value}>{formatValue(displayValue)}</Text>
-					<Text style={styles.statLabel}>{statLabel}</Text>
+					<ThemedText
+						variant="extrabold"
+						style={styles.title}
+					>
+						{title}
+					</ThemedText>
+					<ThemedText
+						variant="extrabold"
+						style={styles.value}
+					>
+						{formatValue(displayValue)}
+					</ThemedText>
+					<ThemedText
+						variant="medium"
+						style={styles.statLabel}
+					>
+						{statLabel}
+					</ThemedText>
 
-					<Text style={styles.quote}>"{quote}"</Text>
+					<ThemedText
+						variant="semibold"
+						style={styles.quote}
+					>
+						"{quote}"
+					</ThemedText>
 
 					{bottomStat && (
 						<View style={styles.bottomPill}>
 							{bottomStatIcon && (
 								<View style={{ marginRight: 8 }}>{bottomStatIcon}</View>
 							)}
-							<Text style={styles.bottomPillText}>{bottomStat}</Text>
+							<ThemedText
+								variant="bold"
+								style={styles.bottomPillText}
+							>
+								{bottomStat}
+							</ThemedText>
 						</View>
 					)}
 				</View>
@@ -152,7 +178,6 @@ const styles = StyleSheet.create({
 	},
 	title: {
 		fontSize: 24,
-		fontWeight: "800",
 		color: "rgba(255,255,255,0.9)",
 		marginBottom: 10,
 		textAlign: "center",
@@ -161,7 +186,6 @@ const styles = StyleSheet.create({
 	},
 	value: {
 		fontSize: 64,
-		fontWeight: "900",
 		color: "white",
 		textAlign: "center",
 		lineHeight: 70,
@@ -170,7 +194,6 @@ const styles = StyleSheet.create({
 		fontSize: 20,
 		color: "rgba(255,255,255,0.9)",
 		marginTop: 10,
-		fontWeight: "500",
 	},
 	quote: {
 		fontSize: 18,
@@ -178,7 +201,6 @@ const styles = StyleSheet.create({
 		marginTop: 40,
 		textAlign: "center",
 		lineHeight: 26,
-		fontWeight: "600",
 	},
 	bottomPill: {
 		flexDirection: "row",
@@ -191,7 +213,6 @@ const styles = StyleSheet.create({
 	},
 	bottomPillText: {
 		color: "white",
-		fontWeight: "bold",
 		fontSize: 16,
 	},
 });

@@ -6,12 +6,12 @@ import {
 	Dimensions,
 	Share,
 	StyleSheet,
-	Text,
 	TouchableOpacity,
 	View,
 } from "react-native";
 import { captureRef } from "react-native-view-shot";
 import { type HealthData, useHealth } from "../context/HealthContext";
+import { ThemedText } from "./ThemedText";
 
 const { width, height } = Dimensions.get("window");
 
@@ -100,37 +100,91 @@ export const SummarySlide: React.FC<SummarySlideProps> = ({
 					style={{ opacity: fadeAnim, width: "100%", padding: 30 }}
 				>
 					<View style={styles.headerContainer}>
-						<Text style={styles.headerText}>{selectedYear} WRAPPED</Text>
+						<ThemedText
+							variant="bold"
+							style={styles.headerText}
+						>
+							{selectedYear} WRAPPED
+						</ThemedText>
 					</View>
 
-					<Text style={styles.title}>Your Health Summary</Text>
+					<ThemedText
+						variant="extrabold"
+						style={styles.title}
+					>
+						Your Health Summary
+					</ThemedText>
 
 					<View style={styles.card}>
 						<View style={styles.row}>
-							<Text style={styles.label}>Steps</Text>
-							<Text style={styles.value}>{data.steps.toLocaleString()}</Text>
+							<ThemedText
+								variant="medium"
+								style={styles.label}
+							>
+								Steps
+							</ThemedText>
+							<ThemedText
+								variant="bold"
+								style={styles.value}
+							>
+								{data.steps.toLocaleString()}
+							</ThemedText>
 						</View>
 						<View style={styles.row}>
-							<Text style={styles.label}>Distance</Text>
-							<Text style={styles.value}>
+							<ThemedText
+								variant="medium"
+								style={styles.label}
+							>
+								Distance
+							</ThemedText>
+							<ThemedText
+								variant="bold"
+								style={styles.value}
+							>
 								{(data.steps * 0.0008).toFixed(1)} km
-							</Text>
+							</ThemedText>
 						</View>
 						<View style={styles.row}>
-							<Text style={styles.label}>Calories</Text>
-							<Text style={styles.value}>
+							<ThemedText
+								variant="medium"
+								style={styles.label}
+							>
+								Calories
+							</ThemedText>
+							<ThemedText
+								variant="bold"
+								style={styles.value}
+							>
 								{Math.round(data.calories).toLocaleString()} kcal
-							</Text>
+							</ThemedText>
 						</View>
 						<View style={styles.row}>
-							<Text style={styles.label}>Sleep</Text>
-							<Text style={styles.value}>
+							<ThemedText
+								variant="medium"
+								style={styles.label}
+							>
+								Sleep
+							</ThemedText>
+							<ThemedText
+								variant="bold"
+								style={styles.value}
+							>
 								{Math.round(data.sleep).toLocaleString()} hrs
-							</Text>
+							</ThemedText>
 						</View>
 						<View style={styles.row}>
-							<Text style={styles.label}>Flights</Text>
-							<Text style={styles.value}>{data.flights.toLocaleString()}</Text>
+							<ThemedText
+								variant="medium"
+								style={styles.label}
+							>
+								Flights
+							</ThemedText>
+							<ThemedText
+								variant="bold"
+								style={styles.value}
+							>
+								{data.flights.toLocaleString()}
+							</ThemedText>
 						</View>
 						<View
 							style={[
@@ -138,14 +192,24 @@ export const SummarySlide: React.FC<SummarySlideProps> = ({
 								{ borderBottomWidth: 0, marginBottom: 0, paddingBottom: 0 },
 							]}
 						>
-							<Text style={styles.label}>Exercise</Text>
-							<Text style={styles.value}>
+							<ThemedText
+								variant="medium"
+								style={styles.label}
+							>
+								Exercise
+							</ThemedText>
+							<ThemedText
+								variant="bold"
+								style={styles.value}
+							>
 								{Math.round(data.exercise).toLocaleString()} min
-							</Text>
+							</ThemedText>
 						</View>
 					</View>
 
-					<Text style={styles.footer}>Health Wrapped: Yearly Stories</Text>
+					<ThemedText style={styles.footer}>
+						Health Wrapped: Yearly Stories
+					</ThemedText>
 				</Animated.View>
 			</View>
 
@@ -156,7 +220,12 @@ export const SummarySlide: React.FC<SummarySlideProps> = ({
 					onPress={shareSummary}
 					style={styles.shareButton}
 				>
-					<Text style={styles.shareButtonText}>Share Summary</Text>
+					<ThemedText
+						variant="bold"
+						style={styles.shareButtonText}
+					>
+						Share Summary
+					</ThemedText>
 				</TouchableOpacity>
 			</Animated.View>
 		</View>
@@ -177,12 +246,10 @@ const styles = StyleSheet.create({
 	headerText: {
 		color: "#4ECDC4",
 		fontSize: 14,
-		fontWeight: "bold",
 		letterSpacing: 2,
 	},
 	title: {
 		fontSize: 32,
-		fontWeight: "800",
 		color: "white",
 		marginBottom: 40,
 		textAlign: "center",
@@ -206,7 +273,6 @@ const styles = StyleSheet.create({
 	},
 	value: {
 		fontSize: 20,
-		fontWeight: "bold",
 		color: "white",
 	},
 	footer: {
@@ -214,7 +280,6 @@ const styles = StyleSheet.create({
 		textAlign: "center",
 		color: "rgba(255,255,255,0.5)",
 		fontSize: 16,
-		fontStyle: "italic",
 	},
 	shareButton: {
 		backgroundColor: "#4ECDC4",
@@ -233,6 +298,5 @@ const styles = StyleSheet.create({
 	shareButtonText: {
 		color: "#121212",
 		fontSize: 18,
-		fontWeight: "bold",
 	},
 });

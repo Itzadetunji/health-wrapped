@@ -4,13 +4,12 @@ import {
 	ActivityIndicator,
 	Animated,
 	StyleSheet,
-	Text,
 	TouchableOpacity,
 	View,
 } from "react-native";
 import { useHealth } from "../context/HealthContext";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { storeData } from "../lib/utils";
+import { ThemedText } from "../components/ThemedText";
 
 export default function Auth() {
 	const router = useRouter();
@@ -35,7 +34,7 @@ export default function Auth() {
 				}),
 			])
 		).start();
-	}, []);
+	}, [scaleAnim]);
 
 	const handlePress = async () => {
 		setLoading(true);
@@ -62,14 +61,19 @@ export default function Auth() {
 					source={require("../assets/apple-health.png")}
 					style={[styles.iconContainer, { transform: [{ scale: scaleAnim }] }]}
 				/>
-				<Text style={styles.title}>Connect Health</Text>
-				<Text style={styles.description}>
+				<ThemedText
+					variant="bold"
+					style={styles.title}
+				>
+					Connect Health
+				</ThemedText>
+				<ThemedText style={styles.description}>
 					To create your yearly story, we need read-only access to your health
 					data. Your data stays on your device and is never uploaded to any
 					server.
-				</Text>
+				</ThemedText>
 
-				{error && <Text style={styles.error}>{error}</Text>}
+				{error && <ThemedText style={styles.error}>{error}</ThemedText>}
 
 				<TouchableOpacity
 					style={styles.button}
@@ -79,7 +83,12 @@ export default function Auth() {
 					{loading ? (
 						<ActivityIndicator color="#000" />
 					) : (
-						<Text style={styles.buttonText}>Allow Access</Text>
+						<ThemedText
+							variant="bold"
+							style={styles.buttonText}
+						>
+							Allow Access
+						</ThemedText>
 					)}
 				</TouchableOpacity>
 			</View>
@@ -110,7 +119,6 @@ const styles = StyleSheet.create({
 	},
 	title: {
 		fontSize: 28,
-		fontWeight: "bold",
 		color: "white",
 		marginBottom: 16,
 		textAlign: "center",
@@ -138,6 +146,5 @@ const styles = StyleSheet.create({
 	buttonText: {
 		color: "#000",
 		fontSize: 18,
-		fontWeight: "bold",
 	},
 });

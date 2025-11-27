@@ -1,11 +1,12 @@
 import { ChevronLeft, Crown } from "lucide-react-native";
 import type React from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import {
 	SafeAreaProvider,
 	useSafeAreaInsets,
 } from "react-native-safe-area-context";
 import { useHealth } from "../context/HealthContext";
+import { ThemedText } from "./ThemedText";
 
 interface ProfileSettingsScreenProps {
 	onBack: () => void;
@@ -29,7 +30,12 @@ export const ProfileSettingsScreen: React.FC<ProfileSettingsScreenProps> = ({
 						size={24}
 					/>
 				</TouchableOpacity>
-				<Text style={styles.headerTitle}>Settings</Text>
+				<ThemedText
+					variant="bold"
+					style={styles.headerTitle}
+				>
+					Settings
+				</ThemedText>
 				<View style={{ width: 40 }} />
 			</View>
 
@@ -42,18 +48,26 @@ export const ProfileSettingsScreen: React.FC<ProfileSettingsScreenProps> = ({
 								size={24}
 								fill="#FFD700"
 							/>
-							<Text style={styles.proTitle}>Pro Plan</Text>
+							<ThemedText
+								variant="bold"
+								style={styles.proTitle}
+							>
+								Pro Plan
+							</ThemedText>
 						</View>
 					</View>
-					<Text style={styles.proDescription}>
+					<ThemedText
+						style={styles.proDescription}
+					>
 						Unlock access to all your historical health data and premium
 						insights.
-					</Text>
+					</ThemedText>
 					<TouchableOpacity
 						style={isPro ? styles.unsubscribeButton : styles.subscribeButton}
 						onPress={togglePro}
 					>
-						<Text
+						<ThemedText
+							variant="bold"
 							style={
 								isPro
 									? styles.unsubscribeButtonText
@@ -61,7 +75,7 @@ export const ProfileSettingsScreen: React.FC<ProfileSettingsScreenProps> = ({
 							}
 						>
 							{isPro ? "Cancel Subscription" : "Subscribe - $4.99/yr"}
-						</Text>
+						</ThemedText>
 					</TouchableOpacity>
 				</View>
 
@@ -90,7 +104,6 @@ const styles = StyleSheet.create({
 	},
 	headerTitle: {
 		fontSize: 18,
-		fontWeight: "bold",
 		color: "white",
 	},
 	content: {
@@ -117,7 +130,6 @@ const styles = StyleSheet.create({
 	},
 	proTitle: {
 		fontSize: 20,
-		fontWeight: "bold",
 		color: "white",
 	},
 	proDescription: {
@@ -141,12 +153,10 @@ const styles = StyleSheet.create({
 	},
 	subscribeButtonText: {
 		color: "#000",
-		fontWeight: "bold",
 		fontSize: 16,
 	},
 	unsubscribeButtonText: {
 		color: "#4ECDC4",
-		fontWeight: "bold",
 		fontSize: 16,
 	},
 	spacer: {

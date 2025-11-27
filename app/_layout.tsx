@@ -4,12 +4,28 @@ import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import { HealthProvider } from "../context/HealthContext";
+import {
+	PlusJakartaSans_400Regular,
+	PlusJakartaSans_500Medium,
+	PlusJakartaSans_600SemiBold,
+	PlusJakartaSans_700Bold,
+	PlusJakartaSans_800ExtraBold,
+	useFonts,
+} from "@expo-google-fonts/plus-jakarta-sans";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 export default function Layout() {
 	useQuickActionRouting();
+
+	const [fontsLoaded] = useFonts({
+		PlusJakartaSans_400Regular,
+		PlusJakartaSans_500Medium,
+		PlusJakartaSans_600SemiBold,
+		PlusJakartaSans_700Bold,
+		PlusJakartaSans_800ExtraBold,
+	});
 
 	useEffect(() => {
 		QuickActions.setItems([
@@ -24,10 +40,14 @@ export default function Layout() {
 	}, []);
 
 	useEffect(() => {
-		// Hide the splash screen after the app is mounted.
-		// In a real app, you might wait for fonts or other assets here.
-		SplashScreen.hideAsync();
-	}, []);
+		if (fontsLoaded) {
+			SplashScreen.hideAsync();
+		}
+	}, [fontsLoaded]);
+
+	if (!fontsLoaded) {
+		return null;
+	}
 
 	return (
 		<HealthProvider>

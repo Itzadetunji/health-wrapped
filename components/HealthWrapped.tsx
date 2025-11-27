@@ -16,7 +16,6 @@ import {
 	type GestureResponderEvent,
 	StatusBar,
 	StyleSheet,
-	Text,
 	TouchableOpacity,
 	TouchableWithoutFeedback,
 	View,
@@ -36,6 +35,7 @@ import {
 	getFlightsQuote,
 	getExerciseQuote,
 } from "../lib/utils";
+import { ThemedText } from "./ThemedText";
 
 const { width } = Dimensions.get("window");
 const SLIDE_DURATION = 5000; // 5 seconds
@@ -316,7 +316,12 @@ export const HealthWrapped: React.FC<HealthWrappedProps> = ({ data }) => {
 					</TouchableOpacity>
 				</View>
 				<View style={styles.headerContainer}>
-					<Text style={styles.headerText}>YOUR {selectedYear} HEALTH</Text>
+					<ThemedText
+						variant="bold"
+						style={styles.headerText}
+					>
+						YOUR {selectedYear} HEALTH
+					</ThemedText>
 				</View>
 			</View>
 
@@ -406,7 +411,6 @@ const styles = StyleSheet.create({
 	headerText: {
 		color: "rgba(255,255,255,0.7)",
 		fontSize: 12,
-		fontWeight: "bold",
 		letterSpacing: 1.5,
 	},
 });
