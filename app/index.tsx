@@ -11,7 +11,7 @@ export default function Index() {
 			"AUTHENTICATED_FIRST_TIME"
 		);
 		const hasAuthenticatedBefore = storedAuthenticatedFirstTime
-			? JSON.parse(storedAuthenticatedFirstTime)
+			? storedAuthenticatedFirstTime
 			: { value: false };
 
 		if (!hasAuthenticatedBefore.value) {

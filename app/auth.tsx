@@ -42,7 +42,7 @@ export default function Auth() {
 		setError(null);
 		const success = await authenticate();
 
-		const hasAuthenticated = JSON.stringify({ value: true });
+		const hasAuthenticated = { value: true };
 		await storeData("AUTHENTICATED_FIRST_TIME", hasAuthenticated);
 
 		setLoading(false);

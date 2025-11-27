@@ -17,7 +17,8 @@
       "bundleIdentifier": "com.adetunji.healthwrapped",
       "infoPlist": {
         "NSHealthShareUsageDescription": "Read health data to track your progress.",
-        "NSHealthUpdateUsageDescription": "Update health data to track your progress."
+        "NSHealthUpdateUsageDescription": "Update health data to track your progress.",
+        "ITSAppUsesNonExemptEncryption": false
       },
       "entitlements": {
         "com.apple.developer.healthkit": true
