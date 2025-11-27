@@ -28,6 +28,14 @@ import {
 import { type HealthData, useHealth } from "../context/HealthContext";
 import { Slide } from "./Slide";
 import { SummarySlide } from "./SummarySlide";
+import {
+	getStepsQuote,
+	getSwimQuote,
+	getCaloriesQuote,
+	getSleepQuote,
+	getFlightsQuote,
+	getExerciseQuote,
+} from "../lib/utils";
 
 const { width } = Dimensions.get("window");
 const SLIDE_DURATION = 5000; // 5 seconds
@@ -163,7 +171,7 @@ export const HealthWrapped: React.FC<HealthWrappedProps> = ({ data }) => {
 					color="#fff"
 				/>
 			),
-			quote: "You walked the equivalent of 50 marathons this year.",
+			quote: getStepsQuote(data.steps),
 			bottomStat: `${(data.steps * 0.0008).toFixed(1)} km traveled`,
 		},
 		{
@@ -178,7 +186,7 @@ export const HealthWrapped: React.FC<HealthWrappedProps> = ({ data }) => {
 					color="#fff"
 				/>
 			),
-			quote: "Just keep swimming, just keep swimming...",
+			quote: getSwimQuote(data.swimDistance),
 			bottomStat: `${Math.floor(data.swimDistance / 50)} Olympic laps`,
 		},
 		{
@@ -193,7 +201,7 @@ export const HealthWrapped: React.FC<HealthWrappedProps> = ({ data }) => {
 					color="#fff"
 				/>
 			),
-			quote: "That's about 300 slices of pizza!",
+			quote: getCaloriesQuote(data.calories),
 			bottomStat: "Fueling your journey",
 		},
 		{
@@ -208,7 +216,7 @@ export const HealthWrapped: React.FC<HealthWrappedProps> = ({ data }) => {
 					color="#fff"
 				/>
 			),
-			quote: "Sleep is the best meditation.",
+			quote: getSleepQuote(data.sleep),
 			bottomStat: `${Math.round(data.sleep / 24)} days spent dreaming`,
 		},
 		{
@@ -223,7 +231,7 @@ export const HealthWrapped: React.FC<HealthWrappedProps> = ({ data }) => {
 					color="#fff"
 				/>
 			),
-			quote: "Ain't no mountain high enough.",
+			quote: getFlightsQuote(data.flights),
 			bottomStat: `${data.flights * 3} meters climbed`,
 		},
 		{
@@ -238,7 +246,7 @@ export const HealthWrapped: React.FC<HealthWrappedProps> = ({ data }) => {
 					color="#fff"
 				/>
 			),
-			quote: "Stronger every single day.",
+			quote: getExerciseQuote(data.exercise),
 			bottomStat: `${Math.round(data.exercise / 60)} hours of sweat`,
 		},
 		{
