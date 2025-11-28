@@ -21,13 +21,35 @@ interface LandingScreenProps {
 	onOpenSettings: () => void;
 }
 
+export const months = [
+	"Full Year",
+	"January",
+	"February",
+	"March",
+	"April",
+	"May",
+	"June",
+	"July",
+	"August",
+	"September",
+	"October",
+	"November",
+	"December",
+];
+
 export const LandingScreen: React.FC<LandingScreenProps> = ({
 	onViewWrapped,
 	// onOpenSettings,
 }) => {
 	const currentYear = new Date().getFullYear();
-	const { isPro, fetchDataForYear, selectedYear, setSelectedYear } =
-		useHealth();
+	const {
+		isPro,
+		fetchDataForYear,
+		selectedYear,
+		setSelectedYear,
+		selectedMonth,
+		setSelectedMonth,
+	} = useHealth();
 	const insets = useSafeAreaInsets();
 
 	const years = Array.from({ length: 5 }, (_, i) => currentYear - i);
@@ -38,14 +60,15 @@ export const LandingScreen: React.FC<LandingScreenProps> = ({
 			return;
 		}
 		setSelectedYear(year);
-		await fetchDataForYear(year);
+		setSelectedMonth(null);
+		await fetchDataForYear(year, null);
 	};
 
 	const handleViewWrapped = async () => {
-		const data = await fetchDataForYear(selectedYear);
+		const data = await fetchDataForYear(selectedYear, selectedMonth);
 
-		if (selectedYear === currentYear && !data?.steps) {
-			return tellUserToEnableHealthPermissions();
+		if (selectedYear === currentYear && data?.steps === 0) {
+			return tellUserToEnableHealthPermissions(selectedMonth as number);
 		}
 
 		onViewWrapped();
@@ -120,6 +143,61 @@ export const LandingScreen: React.FC<LandingScreenProps> = ({
 					))}
 				</ScrollView>
 
+				{/* Month Selector */}
+				<ThemedText
+					variant="semibold"
+					style={styles.sectionTitle}
+				>
+					Select Month
+				</ThemedText>
+				<ScrollView
+					horizontal
+					showsHorizontalScrollIndicator={false}
+					style={styles.monthSelector}
+				>
+					{months.map((m, idx) => {
+						const isFullYear = idx === 0;
+						const monthIndex = isFullYear ? null : idx - 1; // months array starts with Full Year
+						const locked =
+							!isFullYear && selectedYear !== currentYear && !isPro;
+						return (
+							<TouchableOpacity
+								key={m}
+								style={[
+									styles.monthChip,
+									(selectedMonth === monthIndex ||
+										(isFullYear && selectedMonth === null)) &&
+										styles.monthChipActive,
+									locked && styles.yearChipLocked,
+								]}
+								onPress={() => {
+									if (locked) {
+										Alert.alert(
+											"Pro Feature",
+											"Subscribe to Pro to access historical months."
+										);
+										return;
+									}
+									setSelectedMonth(monthIndex);
+									fetchDataForYear(selectedYear, monthIndex);
+								}}
+							>
+								<ThemedText
+									variant="semibold"
+									style={[
+										styles.monthText,
+										(selectedMonth === monthIndex ||
+											(isFullYear && selectedMonth === null)) &&
+											styles.monthTextActive,
+									]}
+								>
+									{m}
+								</ThemedText>
+							</TouchableOpacity>
+						);
+					})}
+				</ScrollView>
+
 				<ThemedText
 					variant="semibold"
 					style={styles.sectionTitle}
@@ -144,7 +222,10 @@ export const LandingScreen: React.FC<LandingScreenProps> = ({
 									variant="bold"
 									style={styles.cardTitle}
 								>
-									{selectedYear} Wrapped
+									{selectedYear}{" "}
+									{selectedMonth === null
+										? "Wrapped"
+										: `${months[selectedMonth + 1]} Wrapped`}
 								</ThemedText>
 								<ThemedText
 									variant="default"
@@ -209,6 +290,29 @@ const styles = StyleSheet.create({
 	yearSelector: {
 		paddingLeft: 20,
 		marginBottom: 20,
+	},
+	monthSelector: {
+		paddingLeft: 20,
+		marginBottom: 10,
+	},
+	monthChip: {
+		paddingHorizontal: 14,
+		paddingVertical: 8,
+		borderRadius: 18,
+		backgroundColor: "rgba(255,255,255,0.04)",
+		marginRight: 10,
+		flexDirection: "row",
+		alignItems: "center",
+	},
+	monthChipActive: {
+		backgroundColor: "#4ECDC4",
+	},
+	monthText: {
+		color: "#888",
+		fontSize: 13,
+	},
+	monthTextActive: {
+		color: "#000",
 	},
 	yearChip: {
 		paddingHorizontal: 20,

@@ -12,6 +12,7 @@ import {
 import { captureRef } from "react-native-view-shot";
 import { type HealthData, useHealth } from "../context/HealthContext";
 import { ThemedText } from "./ThemedText";
+import { months } from "./LandingScreen";
 
 const { width, height } = Dimensions.get("window");
 
@@ -27,7 +28,7 @@ export const SummarySlide: React.FC<SummarySlideProps> = ({
 	const fadeAnim = useRef(new Animated.Value(0)).current;
 	const pulseAnim = useRef(new Animated.Value(0)).current;
 	const viewRef = useRef(null);
-	const { selectedYear } = useHealth();
+	const { selectedMonth, selectedYear } = useHealth();
 
 	useEffect(() => {
 		if (isActive) {
@@ -104,6 +105,7 @@ export const SummarySlide: React.FC<SummarySlideProps> = ({
 							variant="bold"
 							style={styles.headerText}
 						>
+							{selectedMonth && months[selectedMonth + 1].toUpperCase()}{" "}
 							{selectedYear} WRAPPED
 						</ThemedText>
 					</View>

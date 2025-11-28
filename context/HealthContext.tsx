@@ -30,8 +30,13 @@ interface HealthContextType {
 	isPro: boolean;
 	selectedYear: number;
 	setSelectedYear: Dispatch<SetStateAction<number>>;
+	selectedMonth: number | null;
+	setSelectedMonth: Dispatch<SetStateAction<number | null>>;
 	authenticate: () => Promise<boolean>;
-	fetchDataForYear: (year: number) => Promise<HealthData | null>;
+	fetchDataForYear: (
+		year: number,
+		month?: number | null
+	) => Promise<HealthData | null>;
 	togglePro: () => void;
 }
 
@@ -52,20 +57,46 @@ export const HealthProvider = ({ children }: { children: ReactNode }) => {
 	const [authorized, setAuthorized] = useState(false);
 	const [isPro, setIsPro] = useState(true);
 	const [selectedYear, setSelectedYear] = useState(currentYear);
+	const [selectedMonth, setSelectedMonth] = useState<number | null>(null); // null = full year
 
 	const togglePro = () => setIsPro((prev) => !prev);
 
-	const fetchDataForYear = async (year: number): Promise<HealthData | null> => {
+	const fetchDataForYear = async (
+		year: number,
+		month: number | null = null
+	): Promise<HealthData | null> => {
 		setLoading(true);
-		const startDate = new Date(year, 0, 1);
-		const endDate = new Date(year, 11, 31, 23, 59, 59);
 
-		// If current year, cap end date to now
 		const now = new Date();
+		let startDate: Date;
+		let endDate: Date;
+
+		if (month !== null && typeof month === "number") {
+			// month is 0-indexed (0 = January)
+			startDate = new Date(year, month, 1, 0, 0, 0);
+			// last day of the month: create date for the 0th day of next month
+			endDate = new Date(year, month + 1, 0, 23, 59, 59);
+		} else {
+			// Full year
+			startDate = new Date(year, 0, 1, 0, 0, 0);
+			endDate = new Date(year, 11, 31, 23, 59, 59);
+		}
+
+		// If querying the current year (or current month within the current year), cap the end date to now
 		if (year === now.getFullYear()) {
-			// Use now as end date if we are looking at current year
-			// But actually, for "Wrapped" usually you want up to now.
-			// Let's just use the full year range, HealthKit handles future dates fine (returns 0 or up to now)
+			if (month === null) {
+				endDate = now;
+			} else if (typeof month === "number") {
+				// If the month being requested is the current month or a future month, cap to now
+				const monthStart = new Date(year, month, 1);
+				const monthEnd = new Date(year, month + 1, 0, 23, 59, 59);
+				if (now >= monthStart && now <= monthEnd) {
+					endDate = now;
+				} else if (now < monthStart) {
+					// requesting a future month - set endDate to now which will produce no data
+					endDate = now;
+				}
+			}
 		}
 
 		try {
@@ -228,6 +259,8 @@ export const HealthProvider = ({ children }: { children: ReactNode }) => {
 				isPro,
 				selectedYear,
 				setSelectedYear,
+				selectedMonth,
+				setSelectedMonth,
 				authenticate,
 				fetchDataForYear,
 				togglePro,

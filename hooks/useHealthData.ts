@@ -6,6 +6,7 @@ import HealthKit, {
 	type CategoryTypeIdentifier,
 } from "@kingstinct/react-native-healthkit";
 import { Alert, Linking } from "react-native";
+import { months } from "../components/LandingScreen";
 
 export interface HealthData {
 	steps: number;
@@ -173,21 +174,31 @@ export const useHealthData = () => {
 	return { data, loading, authorized, authenticate };
 };
 
-export const tellUserToEnableHealthPermissions = () => {
-	Alert.alert(
-		"No Health Data Found",
-		"We couldn't find any steps data for this year. Please grant permission in Settings:\n\nSettings > Health > Data Access & Devices > Health Wrapped > Turn On All. \n\nRestart the app after enabling permissions.",
-		[
-			{
-				text: "Open Settings",
-				onPress: () => {
-					// Opens the Health app
-					Linking.openSettings().catch(() => {
-						Alert.alert("Error", "Could not open Settings");
-					});
+export const tellUserToEnableHealthPermissions = (selectedMonth: number) => {
+	if (Number.isInteger(selectedMonth)) {
+		// Specific month selected
+		Alert.alert(
+			`No Health Data Found For ${months[selectedMonth + 1]}`,
+			"We couldn't find any data for this month.\n\nSorry 🥺",
+			[{ text: "It's Okay" }],
+		);
+	} else {
+		// Full year selected
+		Alert.alert(
+			"No Health Data Found",
+			"We couldn't find any data for this year. Please grant permission in Settings:\n\nSettings > Health > Data Access & Devices > Health Wrapped > Turn On All. \n\nRestart the app after enabling permissions.",
+			[
+				{
+					text: "Open Settings",
+					onPress: () => {
+						// Opens the Health app
+						Linking.openSettings().catch(() => {
+							Alert.alert("Error", "Could not open Settings");
+						});
+					},
 				},
-			},
-		],
-	);
+			],
+		);
+	}
 	return false;
 };

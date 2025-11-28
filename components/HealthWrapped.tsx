@@ -36,6 +36,7 @@ import {
 	getExerciseQuote,
 } from "../lib/utils";
 import { ThemedText } from "./ThemedText";
+import { months } from "./LandingScreen";
 
 const { width } = Dimensions.get("window");
 const SLIDE_DURATION = 5000; // 5 seconds
@@ -151,12 +152,13 @@ type SummarySlideData = {
 
 type SlideItem = SlideData | SummarySlideData;
 
+// Main component function was missing - this is the fix!
 export const HealthWrapped: React.FC<HealthWrappedProps> = ({ data }) => {
 	const [currentIndex, setCurrentIndex] = useState(0);
 	const [isPaused, setIsPaused] = useState(false);
 	const router = useRouter();
 	const insets = useSafeAreaInsets();
-	const { selectedYear } = useHealth();
+	const { selectedYear, selectedMonth } = useHealth();
 
 	const slides: SlideItem[] = [
 		{
@@ -320,7 +322,9 @@ export const HealthWrapped: React.FC<HealthWrappedProps> = ({ data }) => {
 						variant="bold"
 						style={styles.headerText}
 					>
-						YOUR {selectedYear} HEALTH
+						{selectedMonth === null
+							? `YOUR ${selectedYear} HEALTH`
+							: `${months[selectedMonth + 1].toUpperCase()} ${selectedYear}`}
 					</ThemedText>
 				</View>
 			</View>
