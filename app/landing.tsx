@@ -1,6 +1,5 @@
-import React from "react";
-import { LandingScreen } from "../components/LandingScreen";
 import { useRouter } from "expo-router";
+import { LandingScreen } from "../components/LandingScreen";
 
 export default function Landing() {
 	const router = useRouter();

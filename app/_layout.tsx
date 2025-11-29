@@ -12,6 +12,8 @@ import {
 	PlusJakartaSans_800ExtraBold,
 	useFonts,
 } from "@expo-google-fonts/plus-jakarta-sans";
+import Purchases from "react-native-purchases";
+import { Platform } from "react-native";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -44,6 +46,21 @@ export default function Layout() {
 			SplashScreen.hideAsync();
 		}
 	}, [fontsLoaded]);
+
+	useEffect(() => {
+		Purchases.setLogLevel(Purchases.LOG_LEVEL.DEBUG);
+
+		if (Platform.OS === "ios") {
+			Purchases.configure({ apiKey: "appl_YCLwMgPFWYNCUKxYgEOiOQxWAHM" });
+		}
+
+		getCustomerInfo();
+	}, []);
+
+	const getCustomerInfo = async () => {
+		const customerInfo = await Purchases.getCustomerInfo();
+		console.log("Customer Info:", customerInfo);
+	};
 
 	if (!fontsLoaded) {
 		return null;

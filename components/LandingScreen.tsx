@@ -1,4 +1,4 @@
-import { ChevronRight, Lock, Play } from "lucide-react-native";
+import { ChevronRight, Lock, Play, Settings } from "lucide-react-native";
 import type React from "react";
 import {
 	Alert,
@@ -39,7 +39,7 @@ export const months = [
 
 export const LandingScreen: React.FC<LandingScreenProps> = ({
 	onViewWrapped,
-	// onOpenSettings,
+	onOpenSettings,
 }) => {
 	const currentYear = new Date().getFullYear();
 	const {
@@ -89,7 +89,7 @@ export const LandingScreen: React.FC<LandingScreenProps> = ({
 						Welcome Back
 					</ThemedText>
 				</View>
-				{/* <TouchableOpacity
+				<TouchableOpacity
 					onPress={onOpenSettings}
 					style={styles.settingsButton}
 				>
@@ -97,7 +97,7 @@ export const LandingScreen: React.FC<LandingScreenProps> = ({
 						color="white"
 						size={24}
 					/>
-				</TouchableOpacity> */}
+				</TouchableOpacity>
 			</View>
 
 			<ScrollView contentContainerStyle={styles.scrollContent}>

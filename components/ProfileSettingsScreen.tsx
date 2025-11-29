@@ -57,9 +57,36 @@ export const ProfileSettingsScreen: React.FC<ProfileSettingsScreenProps> = ({
 						</View>
 					</View>
 					<ThemedText style={styles.proDescription}>
-						Unlock access to all your historical health data and premium
-						insights.
+						Unlock premium features and full access to your health history.
 					</ThemedText>
+
+					<View style={styles.featuresList}>
+						<View style={styles.featureItem}>
+							<View style={styles.featureBullet} />
+							<ThemedText style={styles.featureText}>
+								View individual month breakdowns
+							</ThemedText>
+						</View>
+						<View style={styles.featureItem}>
+							<View style={styles.featureBullet} />
+							<ThemedText style={styles.featureText}>
+								Access all previous years of data
+							</ThemedText>
+						</View>
+						<View style={styles.featureItem}>
+							<View style={styles.featureBullet} />
+							<ThemedText style={styles.featureText}>
+								Advanced health insights and trends
+							</ThemedText>
+						</View>
+						<View style={styles.featureItem}>
+							<View style={styles.featureBullet} />
+							<ThemedText style={styles.featureText}>
+								Export your health data
+							</ThemedText>
+						</View>
+					</View>
+
 					<TouchableOpacity
 						style={isPro ? styles.unsubscribeButton : styles.subscribeButton}
 						onPress={togglePro}
@@ -158,6 +185,26 @@ const styles = StyleSheet.create({
 		fontSize: 16,
 	},
 	spacer: {
+		flex: 1,
+	},
+	featuresList: {
+		marginBottom: 20,
+		gap: 12,
+	},
+	featureItem: {
+		flexDirection: "row",
+		alignItems: "center",
+		gap: 12,
+	},
+	featureBullet: {
+		width: 6,
+		height: 6,
+		borderRadius: 3,
+		backgroundColor: "#4ECDC4",
+	},
+	featureText: {
+		color: "#e0e0e0",
+		fontSize: 14,
 		flex: 1,
 	},
 });
