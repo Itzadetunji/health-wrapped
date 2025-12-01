@@ -2,7 +2,14 @@ import { useRouter } from "expo-router";
 import { ChevronLeft, Crown } from "lucide-react-native";
 import type React from "react";
 import { useEffect, useState } from "react";
-import { Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+	Modal,
+	StyleSheet,
+	Text,
+	TouchableOpacity,
+	View,
+	Linking,
+} from "react-native";
 import type {
 	PurchasesOfferings,
 	PurchasesPackage,
@@ -190,6 +197,33 @@ export const ProfileSettingsScreen: React.FC<ProfileSettingsScreenProps> = ({
 					</View>
 				</View>
 			))}
+
+			<View style={styles.footer}>
+				<TouchableOpacity
+					onPress={() =>
+						Linking.openURL("https://health-wrapped-support.vercel.app/privacy")
+					}
+				>
+					<ThemedText style={styles.footerLink}>Privacy Policy</ThemedText>
+				</TouchableOpacity>
+				<ThemedText style={styles.footerDivider}>•</ThemedText>
+
+				<TouchableOpacity
+					onPress={() =>
+						Linking.openURL("https://health-wrapped-support.vercel.app/support")
+					}
+				>
+					<ThemedText style={styles.footerLink}>Support</ThemedText>
+				</TouchableOpacity>
+				<ThemedText style={styles.footerDivider}>•</ThemedText>
+				<TouchableOpacity
+					onPress={() =>
+						Linking.openURL("https://health-wrapped-support.vercel.app/terms")
+					}
+				>
+					<ThemedText style={styles.footerLink}>Terms</ThemedText>
+				</TouchableOpacity>
+			</View>
 		</SafeAreaProvider>
 	);
 };
@@ -341,5 +375,21 @@ const styles = StyleSheet.create({
 	modalButtonText: {
 		color: "#000",
 		fontWeight: "bold",
+	},
+	footer: {
+		flexDirection: "row",
+		justifyContent: "center",
+		alignItems: "center",
+		paddingBottom: 30,
+		gap: 10,
+	},
+	footerLink: {
+		color: "#666",
+		fontSize: 12,
+		textDecorationLine: "underline",
+	},
+	footerDivider: {
+		color: "#666",
+		fontSize: 12,
 	},
 });

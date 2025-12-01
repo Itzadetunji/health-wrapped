@@ -66,11 +66,11 @@ export const HealthProvider = ({ children }: { children: ReactNode }) => {
 		Purchases.setLogLevel(Purchases.LOG_LEVEL.DEBUG);
 
 		if (Platform.OS === "ios") {
-			Purchases.configure({ apiKey: "test_UcQQRwJVPXUxmGlfsgBojPxMNrH" });
+			Purchases.configure({ apiKey: "appl_YCLwMgPFWYNCUKxYgEOiOQxWAHM" });
 		}
 
 		getCustomerInfo();
-		getOfferings();
+		// getOfferings();
 	}, []);
 	// test_UcQQRwJVPXUxmGlfsgBojPxMNrH
 	// appl_YCLwMgPFWYNCUKxYgEOiOQxWAHM
@@ -81,15 +81,15 @@ export const HealthProvider = ({ children }: { children: ReactNode }) => {
 		updateProStatus(customerInfo);
 	};
 
-	const getOfferings = async () => {
-		const offerings = await Purchases.getOfferings();
-		if (
-			offerings.current !== null &&
-			offerings.current.availablePackages.length !== 0
-		) {
-			console.log("Offerings:", JSON.stringify(offerings, null, 2));
-		}
-	};
+	// const getOfferings = async () => {
+	// 	const offerings = await Purchases.getOfferings();
+	// 	if (
+	// 		offerings.current !== null &&
+	// 		offerings.current.availablePackages.length !== 0
+	// 	) {
+	// 		console.log("Offerings:", JSON.stringify(offerings, null, 2));
+	// 	}
+	// };
 
 	const updateProStatus = (customerInfo: CustomerInfo) => {
 		const isProActive =

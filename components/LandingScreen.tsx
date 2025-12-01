@@ -96,7 +96,7 @@ export const LandingScreen: React.FC<LandingScreenProps> = ({
 			<View style={styles.header}>
 				<View style={styles.headerLeft}>
 					<Image
-						source={require("../assets/icon.png")}
+						source={require("../assets/icon.jpg")}
 						style={styles.logo}
 					/>
 					<ThemedText
