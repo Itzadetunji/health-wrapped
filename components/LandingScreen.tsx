@@ -1,5 +1,6 @@
 import { ChevronRight, Lock, Play, Settings } from "lucide-react-native";
 import type React from "react";
+import { useEffect, useRef } from "react";
 import {
 	Alert,
 	Image,
@@ -12,6 +13,7 @@ import {
 	SafeAreaProvider,
 	useSafeAreaInsets,
 } from "react-native-safe-area-context";
+
 import { useHealth } from "../context/HealthContext";
 import { tellUserToEnableHealthPermissions } from "../hooks/useHealthData";
 import { ThemedText } from "./ThemedText";
@@ -51,12 +53,27 @@ export const LandingScreen: React.FC<LandingScreenProps> = ({
 		setSelectedMonth,
 	} = useHealth();
 	const insets = useSafeAreaInsets();
+	const prevIsPro = useRef(isPro);
+
+	useEffect(() => {
+		if (prevIsPro.current && !isPro) {
+			Alert.alert("Subscription Expired", "Your Pro subscription has expired.");
+		}
+		prevIsPro.current = isPro;
+	}, [isPro]);
 
 	const years = Array.from({ length: 5 }, (_, i) => currentYear - i);
 
 	const handleYearSelect = async (year: number) => {
 		if (year !== currentYear && !isPro) {
-			Alert.alert("Pro Feature", "Subscribe to Pro to access historical data.");
+			Alert.alert(
+				"Pro Feature",
+				"Subscribe to Pro to access historical data.",
+				[
+					{ text: "Cancel", style: "cancel" },
+					{ text: "Upgrade", onPress: onOpenSettings },
+				]
+			);
 			return;
 		}
 		setSelectedYear(year);
@@ -158,6 +175,16 @@ export const LandingScreen: React.FC<LandingScreenProps> = ({
 					{months.map((m, idx) => {
 						const isFullYear = idx === 0;
 						const monthIndex = isFullYear ? null : idx - 1; // months array starts with Full Year
+
+						// Hide future months for current year
+						if (
+							selectedYear === currentYear &&
+							monthIndex !== null &&
+							monthIndex > new Date().getMonth()
+						) {
+							return null;
+						}
+
 						const locked =
 							!isFullYear && selectedYear !== currentYear && !isPro;
 						return (
@@ -174,7 +201,11 @@ export const LandingScreen: React.FC<LandingScreenProps> = ({
 									if (locked) {
 										Alert.alert(
 											"Pro Feature",
-											"Subscribe to Pro to access historical months."
+											"Subscribe to Pro to access historical months.",
+											[
+												{ text: "Cancel", style: "cancel" },
+												{ text: "Upgrade", onPress: onOpenSettings },
+											]
 										);
 										return;
 									}

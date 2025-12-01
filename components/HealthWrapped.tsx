@@ -160,6 +160,8 @@ export const HealthWrapped: React.FC<HealthWrappedProps> = ({ data }) => {
 	const insets = useSafeAreaInsets();
 	const { selectedYear, selectedMonth } = useHealth();
 
+	const isMonth = selectedMonth !== null;
+
 	const slides: SlideItem[] = [
 		{
 			id: "steps",
@@ -173,7 +175,7 @@ export const HealthWrapped: React.FC<HealthWrappedProps> = ({ data }) => {
 					color="#fff"
 				/>
 			),
-			quote: getStepsQuote(data.steps),
+			quote: getStepsQuote(data.steps, isMonth),
 			bottomStat: `${(data.steps * 0.0008).toFixed(1)} km traveled`,
 		},
 		{
@@ -188,7 +190,7 @@ export const HealthWrapped: React.FC<HealthWrappedProps> = ({ data }) => {
 					color="#fff"
 				/>
 			),
-			quote: getSwimQuote(data.swimDistance),
+			quote: getSwimQuote(data.swimDistance, isMonth),
 			bottomStat: `${Math.floor(data.swimDistance / 50)} Olympic laps`,
 		},
 		{
@@ -203,7 +205,7 @@ export const HealthWrapped: React.FC<HealthWrappedProps> = ({ data }) => {
 					color="#fff"
 				/>
 			),
-			quote: getCaloriesQuote(data.calories),
+			quote: getCaloriesQuote(data.calories, isMonth),
 			bottomStat: "Fueling your journey",
 		},
 		{
@@ -218,7 +220,7 @@ export const HealthWrapped: React.FC<HealthWrappedProps> = ({ data }) => {
 					color="#fff"
 				/>
 			),
-			quote: getSleepQuote(data.sleep),
+			quote: getSleepQuote(data.sleep, isMonth),
 			bottomStat: `${Math.round(data.sleep / 24)} days spent dreaming`,
 		},
 		{
@@ -233,7 +235,7 @@ export const HealthWrapped: React.FC<HealthWrappedProps> = ({ data }) => {
 					color="#fff"
 				/>
 			),
-			quote: getFlightsQuote(data.flights),
+			quote: getFlightsQuote(data.flights, isMonth),
 			bottomStat: `${data.flights * 3} meters climbed`,
 		},
 		{
@@ -248,7 +250,7 @@ export const HealthWrapped: React.FC<HealthWrappedProps> = ({ data }) => {
 					color="#fff"
 				/>
 			),
-			quote: getExerciseQuote(data.exercise),
+			quote: getExerciseQuote(data.exercise, isMonth),
 			bottomStat: `${Math.round(data.exercise / 60)} hours of sweat`,
 		},
 		{

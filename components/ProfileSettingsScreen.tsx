@@ -1,10 +1,18 @@
+import { useRouter } from "expo-router";
 import { ChevronLeft, Crown } from "lucide-react-native";
 import type React from "react";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { useEffect, useState } from "react";
+import { Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import type {
+	PurchasesOfferings,
+	PurchasesPackage,
+} from "react-native-purchases";
+import Purchases from "react-native-purchases";
 import {
 	SafeAreaProvider,
 	useSafeAreaInsets,
 } from "react-native-safe-area-context";
+
 import { useHealth } from "../context/HealthContext";
 import { ThemedText } from "./ThemedText";
 
@@ -15,11 +23,75 @@ interface ProfileSettingsScreenProps {
 export const ProfileSettingsScreen: React.FC<ProfileSettingsScreenProps> = ({
 	onBack,
 }) => {
-	const { isPro, togglePro } = useHealth();
+	const { isPro, updateProStatus } = useHealth();
+	const router = useRouter();
+	const [offerings, setOfferings] = useState<PurchasesOfferings | null>(null);
+	const [showSuccessModal, setShowSuccessModal] = useState(false);
 	const insets = useSafeAreaInsets();
+
+	const handlePurchase = async (pkg: PurchasesPackage) => {
+		try {
+			const purchaseMade = await Purchases.purchasePackage(pkg);
+			console.log(purchaseMade.customerInfo.entitlements);
+			if (
+				typeof purchaseMade.customerInfo.entitlements.active["test_yearly"] !==
+				"undefined"
+			) {
+				setShowSuccessModal(true);
+				updateProStatus(purchaseMade.customerInfo);
+			}
+		} catch (e) {
+			console.log("Purchase error:", e);
+		}
+	};
+
+	const getOfferings = async () => {
+		const offerings = await Purchases.getOfferings();
+		if (
+			offerings.current !== null &&
+			offerings.current.availablePackages.length !== 0
+		) {
+			// console.log("Offerings:", JSON.stringify(offerings, null, 2));
+			setOfferings(offerings);
+		}
+	};
+
+	useEffect(() => {
+		getOfferings();
+	}, []);
 
 	return (
 		<SafeAreaProvider style={[styles.container, { paddingTop: insets.top }]}>
+			<Modal
+				visible={showSuccessModal}
+				transparent
+				animationType="fade"
+			>
+				<View style={styles.modalOverlay}>
+					<View style={styles.modalContent}>
+						<Text style={{ fontSize: 50 }}>🎉</Text>
+						<ThemedText
+							variant="bold"
+							style={styles.modalTitle}
+						>
+							You're Pro!
+						</ThemedText>
+						<ThemedText style={styles.modalText}>
+							Thank you for subscribing 🎉
+						</ThemedText>
+						<TouchableOpacity
+							onPress={() => {
+								setShowSuccessModal(false);
+								router.push("/landing");
+							}}
+							style={styles.modalButton}
+						>
+							<ThemedText style={styles.modalButtonText}>Let's Go!</ThemedText>
+						</TouchableOpacity>
+					</View>
+				</View>
+			</Modal>
+
 			<View style={styles.header}>
 				<TouchableOpacity
 					onPress={onBack}
@@ -39,73 +111,85 @@ export const ProfileSettingsScreen: React.FC<ProfileSettingsScreenProps> = ({
 				<View style={{ width: 40 }} />
 			</View>
 
-			<View style={styles.content}>
-				<View style={styles.proCard}>
-					<View style={styles.proHeader}>
-						<View style={styles.proTitleRow}>
-							<Crown
-								color="#FFD700"
-								size={24}
-								fill="#FFD700"
-							/>
+			{offerings?.current?.availablePackages?.map((item) => (
+				<View
+					style={styles.content}
+					key={item.identifier}
+				>
+					<View style={styles.proCard}>
+						<View style={styles.proHeader}>
+							<View style={styles.proTitleRow}>
+								<Crown
+									color="#FFD700"
+									size={24}
+									fill="#FFD700"
+								/>
+								<ThemedText
+									variant="bold"
+									style={styles.proTitle}
+								>
+									{item.product.title}
+								</ThemedText>
+							</View>
+							<View style={styles.priceContainer}>
+								<ThemedText
+									style={styles.priceValue}
+									variant="bold"
+								>
+									{item.product.priceString}
+								</ThemedText>
+								<ThemedText style={styles.pricePeriod}>
+									/{item.packageType === "ANNUAL" ? "year" : "month"}
+								</ThemedText>
+							</View>
+						</View>
+						<ThemedText style={styles.proDescription}>
+							Unlock premium features and full access to your health wrapped.
+						</ThemedText>
+
+						<View style={styles.featuresList}>
+							<View style={styles.featureItem}>
+								<View style={styles.featureBullet} />
+								<ThemedText style={styles.featureText}>
+									View individual month breakdowns
+								</ThemedText>
+							</View>
+							<View style={styles.featureItem}>
+								<View style={styles.featureBullet} />
+								<ThemedText style={styles.featureText}>
+									Access all previous years of data
+								</ThemedText>
+							</View>
+							<View style={styles.featureItem}>
+								<View style={styles.featureBullet} />
+								<ThemedText style={styles.featureText}>
+									Advanced health insights and trends
+								</ThemedText>
+							</View>
+						</View>
+
+						<TouchableOpacity
+							style={[
+								isPro ? styles.unsubscribeButton : styles.subscribeButton,
+								{ marginBottom: 10 },
+							]}
+							onPress={() => handlePurchase(item)}
+							disabled={isPro}
+						>
 							<ThemedText
 								variant="bold"
-								style={styles.proTitle}
+								style={
+									isPro
+										? styles.unsubscribeButtonText
+										: styles.subscribeButtonText
+								}
 							>
-								Pro Plan
+								{isPro ? "You are pro" : "Subscribe Now"}
 							</ThemedText>
-						</View>
+						</TouchableOpacity>
 					</View>
-					<ThemedText style={styles.proDescription}>
-						Unlock premium features and full access to your health history.
-					</ThemedText>
-
-					<View style={styles.featuresList}>
-						<View style={styles.featureItem}>
-							<View style={styles.featureBullet} />
-							<ThemedText style={styles.featureText}>
-								View individual month breakdowns
-							</ThemedText>
-						</View>
-						<View style={styles.featureItem}>
-							<View style={styles.featureBullet} />
-							<ThemedText style={styles.featureText}>
-								Access all previous years of data
-							</ThemedText>
-						</View>
-						<View style={styles.featureItem}>
-							<View style={styles.featureBullet} />
-							<ThemedText style={styles.featureText}>
-								Advanced health insights and trends
-							</ThemedText>
-						</View>
-						<View style={styles.featureItem}>
-							<View style={styles.featureBullet} />
-							<ThemedText style={styles.featureText}>
-								Export your health data
-							</ThemedText>
-						</View>
-					</View>
-
-					<TouchableOpacity
-						style={isPro ? styles.unsubscribeButton : styles.subscribeButton}
-						onPress={togglePro}
-					>
-						<ThemedText
-							variant="bold"
-							style={
-								isPro
-									? styles.unsubscribeButtonText
-									: styles.subscribeButtonText
-							}
-						>
-							{isPro ? "Cancel Subscription" : "Subscribe - $4.99/yr"}
-						</ThemedText>
-					</TouchableOpacity>
 				</View>
-
-				<View style={styles.spacer} />
-			</View>
+			))}
 		</SafeAreaProvider>
 	);
 };
@@ -140,13 +224,15 @@ const styles = StyleSheet.create({
 		borderRadius: 20,
 		padding: 20,
 		borderWidth: 1,
+		display: "flex",
+		flexDirection: "column",
 		borderColor: "rgba(255, 215, 0, 0.3)",
 	},
 	proHeader: {
-		flexDirection: "row",
+		flexDirection: "column",
 		justifyContent: "space-between",
-		alignItems: "center",
 		marginBottom: 10,
+		gap: 10,
 	},
 	proTitleRow: {
 		flexDirection: "row",
@@ -154,8 +240,23 @@ const styles = StyleSheet.create({
 		gap: 10,
 	},
 	proTitle: {
-		fontSize: 20,
+		fontSize: 18,
 		color: "white",
+		flexShrink: 1,
+	},
+	priceContainer: {
+		flexDirection: "row",
+		alignItems: "baseline",
+	},
+	priceValue: {
+		fontSize: 22,
+		fontWeight: "bold",
+		color: "white",
+	},
+	pricePeriod: {
+		fontSize: 14,
+		color: "rgba(255,255,255,0.6)",
+		marginLeft: 2,
 	},
 	proDescription: {
 		color: "#aaa",
@@ -206,5 +307,39 @@ const styles = StyleSheet.create({
 		color: "#e0e0e0",
 		fontSize: 14,
 		flex: 1,
+	},
+	modalOverlay: {
+		flex: 1,
+		backgroundColor: "rgba(0,0,0,0.8)",
+		justifyContent: "center",
+		alignItems: "center",
+	},
+	modalContent: {
+		backgroundColor: "#1E1E1E",
+		padding: 30,
+		borderRadius: 20,
+		alignItems: "center",
+		width: "80%",
+	},
+	modalTitle: {
+		fontSize: 24,
+		color: "white",
+		marginTop: 20,
+		marginBottom: 10,
+	},
+	modalText: {
+		color: "#aaa",
+		textAlign: "center",
+		marginBottom: 20,
+	},
+	modalButton: {
+		backgroundColor: "#4ECDC4",
+		paddingHorizontal: 30,
+		paddingVertical: 12,
+		borderRadius: 20,
+	},
+	modalButtonText: {
+		color: "#000",
+		fontWeight: "bold",
 	},
 });

@@ -38,68 +38,78 @@ export const clearAll = async () => {
 	}
 };
 
-export const getStepsQuote = (steps: number) => {
+export const getStepsQuote = (steps: number, isMonth: boolean = false) => {
+	const period = isMonth ? "month" : "year";
 	if (steps === 0)
-		return "Hmm, looks like you took a year off from walking. The couch called, you answered.";
-	if (steps < 1000000)
-		return "Every journey begins with a single step. You took a few this year!";
-	if (steps < 3000000)
+		return `Hmm, looks like you took a ${period} off from walking. The couch called, you answered.`;
+	if (steps < (isMonth ? 80000 : 1000000))
+		return "Every journey begins with a single step. You took a few this time!";
+	if (steps < (isMonth ? 250000 : 3000000))
 		return "You walked the equivalent of crossing a small country!";
-	if (steps < 5000000)
+	if (steps < (isMonth ? 400000 : 5000000))
 		return "You could've walked from New York to Los Angeles with those steps!";
-	return "You walked the equivalent of 50 marathons this year. Legend.";
+	return `You walked the equivalent of ${isMonth ? "4" : "50"} marathons this ${period}. Legend.`;
 };
 
-export const getSwimQuote = (distance: number) => {
+export const getSwimQuote = (distance: number, isMonth: boolean = false) => {
+	const period = isMonth ? "month" : "year";
 	if (distance === 0)
-		return "Hmm, you didn't get to swim this year. I'm sure the sharks missed you.";
-	if (distance < 5000) return "You dipped your toes in! Every stroke counts.";
-	if (distance < 20000) return "Just keep swimming, just keep swimming...";
-	if (distance < 50000)
+		return `Hmm, you didn't get to swim this ${period}. I'm sure the sharks missed you.`;
+	if (distance < (isMonth ? 400 : 5000))
+		return "You dipped your toes in! Every stroke counts.";
+	if (distance < (isMonth ? 1600 : 20000))
+		return "Just keep swimming, just keep swimming...";
+	if (distance < (isMonth ? 4000 : 50000))
 		return "You could've swam across the English Channel with that distance!";
 	return "Michael Phelps is taking notes. Seriously impressive.";
 };
 
-export const getCaloriesQuote = (calories: number) => {
+export const getCaloriesQuote = (
+	calories: number,
+	isMonth: boolean = false,
+) => {
 	if (calories === 0)
 		return "Zero calories burned? Were you in hibernation mode?";
-	if (calories < 100000)
+	if (calories < (isMonth ? 8000 : 100000))
 		return "You're warming up! Every calorie burned is progress.";
-	if (calories < 300000)
+	if (calories < (isMonth ? 25000 : 300000))
 		return "That's enough energy to power a small village!";
-	if (calories < 500000)
+	if (calories < (isMonth ? 40000 : 500000))
 		return "You could've run your own fitness empire with that energy!";
-	return "That's about 300 slices of pizza! Or 500 donuts. Your choice.";
+	return `That's about ${isMonth ? "25" : "300"} slices of pizza! Or ${isMonth ? "40" : "500"} donuts. Your choice.`;
 };
 
-export const getSleepQuote = (hours: number) => {
+export const getSleepQuote = (hours: number, isMonth: boolean = false) => {
 	if (hours === 0)
 		return "Did you even sleep? Please tell me you blinked at least.";
-	if (hours < 2000)
+	if (hours < (isMonth ? 160 : 2000))
 		return "Burning the candle at both ends? Your pillow misses you.";
-	if (hours < 2500)
+	if (hours < (isMonth ? 200 : 2500))
 		return "Decent rest, but your dreams want more screen time.";
-	if (hours < 3000)
+	if (hours < (isMonth ? 250 : 3000))
 		return "Sleep is the best meditation. You're getting good at it!";
 	return "You're basically a professional sleeper. Olympic-level dreaming.";
 };
 
-export const getFlightsQuote = (flights: number) => {
+export const getFlightsQuote = (flights: number, isMonth: boolean = false) => {
 	if (flights === 0)
 		return "Stairs? Never heard of them. Team elevator all the way.";
-	if (flights < 500) return "Baby steps to the summit! Keep climbing.";
-	if (flights < 2000) return "You climbed higher than most people's ambitions!";
-	if (flights < 5000)
+	if (flights < (isMonth ? 40 : 500))
+		return "Baby steps to the summit! Keep climbing.";
+	if (flights < (isMonth ? 160 : 2000))
+		return "You climbed higher than most people's ambitions!";
+	if (flights < (isMonth ? 400 : 5000))
 		return "That's halfway up Mount Everest. Without the oxygen mask.";
 	return "Ain't no mountain high enough. You conquered them all.";
 };
 
-export const getExerciseQuote = (minutes: number) => {
+export const getExerciseQuote = (minutes: number, isMonth: boolean = false) => {
 	if (minutes === 0) return "Exercise? In this economy? Fair enough.";
-	if (minutes < 1000)
+	if (minutes < (isMonth ? 80 : 1000))
 		return "Rome wasn't built in a day, and neither is fitness!";
-	if (minutes < 5000) return "You're building momentum! The gains are real.";
-	if (minutes < 10000)
+	if (minutes < (isMonth ? 400 : 5000))
+		return "You're building momentum! The gains are real.";
+	if (minutes < (isMonth ? 800 : 10000))
 		return "Stronger every single day. Keep that fire burning!";
 	return "You basically lived at the gym. Respect.";
 };

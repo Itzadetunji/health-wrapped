@@ -47,21 +47,6 @@ export default function Layout() {
 		}
 	}, [fontsLoaded]);
 
-	useEffect(() => {
-		Purchases.setLogLevel(Purchases.LOG_LEVEL.DEBUG);
-
-		if (Platform.OS === "ios") {
-			Purchases.configure({ apiKey: "appl_YCLwMgPFWYNCUKxYgEOiOQxWAHM" });
-		}
-
-		getCustomerInfo();
-	}, []);
-
-	const getCustomerInfo = async () => {
-		const customerInfo = await Purchases.getCustomerInfo();
-		console.log("Customer Info:", customerInfo);
-	};
-
 	if (!fontsLoaded) {
 		return null;
 	}

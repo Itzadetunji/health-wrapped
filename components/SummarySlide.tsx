@@ -105,7 +105,9 @@ export const SummarySlide: React.FC<SummarySlideProps> = ({
 							variant="bold"
 							style={styles.headerText}
 						>
-							{selectedMonth && months[selectedMonth + 1].toUpperCase()}{" "}
+							{selectedMonth !== null
+								? `${months[selectedMonth + 1].toUpperCase()} `
+								: ""}
 							{selectedYear} WRAPPED
 						</ThemedText>
 					</View>

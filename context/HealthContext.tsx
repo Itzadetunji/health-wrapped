@@ -10,9 +10,11 @@ import {
 	type ReactNode,
 	type SetStateAction,
 	useContext,
+	useEffect,
 	useState,
 } from "react";
-import { Alert } from "react-native";
+import { Alert, Platform } from "react-native";
+import Purchases, { type CustomerInfo } from "react-native-purchases";
 
 export interface HealthData {
 	steps: number;
@@ -37,7 +39,8 @@ interface HealthContextType {
 		year: number,
 		month?: number | null
 	) => Promise<HealthData | null>;
-	togglePro: () => void;
+	updateProStatus: (customerInfo: CustomerInfo) => void;
+	restorePurchases: () => Promise<void>;
 }
 
 const HealthContext = createContext<HealthContextType | undefined>(undefined);
@@ -55,11 +58,47 @@ export const HealthProvider = ({ children }: { children: ReactNode }) => {
 	});
 	const [loading, setLoading] = useState(false);
 	const [authorized, setAuthorized] = useState(false);
-	const [isPro, setIsPro] = useState(true);
+	const [isPro, setIsPro] = useState(false);
 	const [selectedYear, setSelectedYear] = useState(currentYear);
 	const [selectedMonth, setSelectedMonth] = useState<number | null>(null); // null = full year
 
-	const togglePro = () => setIsPro((prev) => !prev);
+	useEffect(() => {
+		Purchases.setLogLevel(Purchases.LOG_LEVEL.DEBUG);
+
+		if (Platform.OS === "ios") {
+			Purchases.configure({ apiKey: "test_UcQQRwJVPXUxmGlfsgBojPxMNrH" });
+		}
+
+		getCustomerInfo();
+	}, []);
+	// test_UcQQRwJVPXUxmGlfsgBojPxMNrH
+	// appl_YCLwMgPFWYNCUKxYgEOiOQxWAHM
+
+	const getCustomerInfo = async () => {
+		const customerInfo = await Purchases.getCustomerInfo();
+		console.log("Customer Info:", customerInfo);
+		updateProStatus(customerInfo);
+	};
+
+	const updateProStatus = (customerInfo: CustomerInfo) => {
+		const isProActive =
+			typeof customerInfo.entitlements.active["test_yearly"] !== "undefined";
+		setIsPro(isProActive);
+	};
+
+	const restorePurchases = async () => {
+		try {
+			const customerInfo = await Purchases.restorePurchases();
+			updateProStatus(customerInfo);
+			if (typeof customerInfo.entitlements.active["pro"] !== "undefined") {
+				Alert.alert("Success", "Purchases restored successfully");
+			} else {
+				Alert.alert("Notice", "No active subscription found to restore");
+			}
+		} catch (e: any) {
+			Alert.alert("Error", e.message);
+		}
+	};
 
 	const fetchDataForYear = async (
 		year: number,
@@ -263,7 +302,8 @@ export const HealthProvider = ({ children }: { children: ReactNode }) => {
 				setSelectedMonth,
 				authenticate,
 				fetchDataForYear,
-				togglePro,
+				restorePurchases,
+				updateProStatus,
 			}}
 		>
 			{children}
