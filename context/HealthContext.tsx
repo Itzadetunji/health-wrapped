@@ -93,7 +93,8 @@ export const HealthProvider = ({ children }: { children: ReactNode }) => {
 
 	const updateProStatus = (customerInfo: CustomerInfo) => {
 		const isProActive =
-			typeof customerInfo.entitlements.active["test_yearly"] !== "undefined";
+			typeof customerInfo.entitlements.active["health_wrapped_yearly"] !==
+			"undefined";
 		setIsPro(isProActive);
 	};
 
