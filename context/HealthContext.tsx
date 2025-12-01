@@ -93,7 +93,7 @@ export const HealthProvider = ({ children }: { children: ReactNode }) => {
 
 	const updateProStatus = (customerInfo: CustomerInfo) => {
 		const isProActive =
-			typeof customerInfo.entitlements.active["health_wrapped_yearly"] !==
+			typeof customerInfo.entitlements.active.health_wrapped_yearly !==
 			"undefined";
 		setIsPro(isProActive);
 	};
@@ -102,7 +102,10 @@ export const HealthProvider = ({ children }: { children: ReactNode }) => {
 		try {
 			const customerInfo = await Purchases.restorePurchases();
 			updateProStatus(customerInfo);
-			if (typeof customerInfo.entitlements.active["pro"] !== "undefined") {
+			if (
+				typeof customerInfo.entitlements.active.health_wrapped_yearly !==
+				"undefined"
+			) {
 				Alert.alert("Success", "Purchases restored successfully");
 			} else {
 				Alert.alert("Notice", "No active subscription found to restore");
