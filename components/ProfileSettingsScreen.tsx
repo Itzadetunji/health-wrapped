@@ -74,7 +74,7 @@ export const ProfileSettingsScreen: React.FC<ProfileSettingsScreenProps> = ({
 							variant="bold"
 							style={styles.modalTitle}
 						>
-							You're Pro!
+							You've Subscribed!
 						</ThemedText>
 						<ThemedText style={styles.modalText}>
 							Thank you for subscribing 🎉
@@ -128,7 +128,7 @@ export const ProfileSettingsScreen: React.FC<ProfileSettingsScreenProps> = ({
 									variant="bold"
 									style={styles.proTitle}
 								>
-									{item.product.title}
+									Premium Subscription
 								</ThemedText>
 							</View>
 							<View style={styles.priceContainer}>
@@ -146,7 +146,6 @@ export const ProfileSettingsScreen: React.FC<ProfileSettingsScreenProps> = ({
 						<ThemedText style={styles.proDescription}>
 							Unlock premium features and full access to your health wrapped.
 						</ThemedText>
-
 						<View style={styles.featuresList}>
 							<View style={styles.featureItem}>
 								<View style={styles.featureBullet} />
@@ -167,7 +166,6 @@ export const ProfileSettingsScreen: React.FC<ProfileSettingsScreenProps> = ({
 								</ThemedText>
 							</View>
 						</View>
-
 						<TouchableOpacity
 							style={[
 								isPro ? styles.unsubscribeButton : styles.subscribeButton,
@@ -184,7 +182,9 @@ export const ProfileSettingsScreen: React.FC<ProfileSettingsScreenProps> = ({
 										: styles.subscribeButtonText
 								}
 							>
-								{isPro ? "You are pro" : "Subscribe Now"}
+								{isPro
+									? "You are subscribed"
+									: `Subscribe - ${item.product.priceString}`}
 							</ThemedText>
 						</TouchableOpacity>
 					</View>

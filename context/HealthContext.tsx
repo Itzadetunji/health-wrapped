@@ -70,6 +70,7 @@ export const HealthProvider = ({ children }: { children: ReactNode }) => {
 		}
 
 		getCustomerInfo();
+		getOfferings();
 	}, []);
 	// test_UcQQRwJVPXUxmGlfsgBojPxMNrH
 	// appl_YCLwMgPFWYNCUKxYgEOiOQxWAHM
@@ -78,6 +79,16 @@ export const HealthProvider = ({ children }: { children: ReactNode }) => {
 		const customerInfo = await Purchases.getCustomerInfo();
 		console.log("Customer Info:", customerInfo);
 		updateProStatus(customerInfo);
+	};
+
+	const getOfferings = async () => {
+		const offerings = await Purchases.getOfferings();
+		if (
+			offerings.current !== null &&
+			offerings.current.availablePackages.length !== 0
+		) {
+			console.log("Offerings:", JSON.stringify(offerings, null, 2));
+		}
 	};
 
 	const updateProStatus = (customerInfo: CustomerInfo) => {
