@@ -66,10 +66,10 @@ export default function Layout() {
 					name="landing"
 					options={{ headerShown: false, animation: "fade" }}
 				/>
-				<Stack.Screen
+				{/* <Stack.Screen
 					name="settings"
 					options={{ headerShown: false, animation: "slide_from_right" }}
-				/>
+				/> */}
 				<Stack.Screen
 					name="wrapped"
 					options={{ headerShown: false, animation: "fade" }}

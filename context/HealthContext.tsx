@@ -58,7 +58,7 @@ export const HealthProvider = ({ children }: { children: ReactNode }) => {
 	});
 	const [loading, setLoading] = useState(false);
 	const [authorized, setAuthorized] = useState(false);
-	const [isPro, setIsPro] = useState(false);
+	const [isPro, setIsPro] = useState(true);
 	const [selectedYear, setSelectedYear] = useState(currentYear);
 	const [selectedMonth, setSelectedMonth] = useState<number | null>(null); // null = full year
 
@@ -95,7 +95,8 @@ export const HealthProvider = ({ children }: { children: ReactNode }) => {
 		const isProActive =
 			typeof customerInfo.entitlements.active.health_wrapped_yearly !==
 			"undefined";
-		setIsPro(isProActive);
+		// setIsPro(isProActive);
+		setIsPro(true);
 	};
 
 	const restorePurchases = async () => {

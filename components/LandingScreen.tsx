@@ -106,7 +106,7 @@ export const LandingScreen: React.FC<LandingScreenProps> = ({
 						Welcome Back
 					</ThemedText>
 				</View>
-				<TouchableOpacity
+				{/* <TouchableOpacity
 					onPress={onOpenSettings}
 					style={styles.settingsButton}
 				>
@@ -114,7 +114,7 @@ export const LandingScreen: React.FC<LandingScreenProps> = ({
 						color="white"
 						size={24}
 					/>
-				</TouchableOpacity>
+				</TouchableOpacity> */}
 			</View>
 
 			<ScrollView contentContainerStyle={styles.scrollContent}>

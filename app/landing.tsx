@@ -9,7 +9,7 @@ export default function Landing() {
 	};
 
 	const handleOpenSettings = () => {
-		router.push("/settings");
+		// router.push("/settings");
 	};
 
 	return (
