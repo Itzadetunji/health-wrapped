@@ -3,7 +3,7 @@
 		"name": "Health Wrapped",
 		"slug": "health-wrapped",
 		"scheme": "healthwrapped",
-		"version": "1.2.4",
+		"version": "1.2.5",
 		"orientation": "portrait",
 		"icon": "./assets/icon.jpg",
 		"userInterfaceStyle": "light",
