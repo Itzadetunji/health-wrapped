@@ -41,8 +41,8 @@ export const ProfileSettingsScreen: React.FC<ProfileSettingsScreenProps> = ({
 			const purchaseMade = await Purchases.purchasePackage(pkg);
 			console.log(purchaseMade.customerInfo.entitlements);
 			if (
-				typeof purchaseMade.customerInfo.entitlements.active["test_yearly"] !==
-				"undefined"
+				typeof purchaseMade.customerInfo.entitlements.active
+					.health_wrapped_yearly !== "undefined"
 			) {
 				setShowSuccessModal(true);
 				updateProStatus(purchaseMade.customerInfo);
@@ -118,11 +118,8 @@ export const ProfileSettingsScreen: React.FC<ProfileSettingsScreenProps> = ({
 				<View style={{ width: 40 }} />
 			</View>
 
-			{offerings?.current?.availablePackages?.map((item) => (
-				<View
-					style={styles.content}
-					key={item.identifier}
-				>
+			{!offerings?.current?.availablePackages.length ? (
+				<View style={styles.content}>
 					<View style={styles.proCard}>
 						<View style={styles.proHeader}>
 							<View style={styles.proTitleRow}>
@@ -143,11 +140,9 @@ export const ProfileSettingsScreen: React.FC<ProfileSettingsScreenProps> = ({
 									style={styles.priceValue}
 									variant="bold"
 								>
-									{item.product.priceString}
+									Premium Health Wrapped
 								</ThemedText>
-								<ThemedText style={styles.pricePeriod}>
-									/{item.packageType === "ANNUAL" ? "year" : "month"}
-								</ThemedText>
+								<ThemedText style={styles.pricePeriod}>/year</ThemedText>
 							</View>
 						</View>
 						<ThemedText style={styles.proDescription}>
@@ -178,7 +173,7 @@ export const ProfileSettingsScreen: React.FC<ProfileSettingsScreenProps> = ({
 								isPro ? styles.unsubscribeButton : styles.subscribeButton,
 								{ marginBottom: 10 },
 							]}
-							onPress={() => handlePurchase(item)}
+							onPress={() => handlePurchase("health_wrapped_yearly" as any)}
 							disabled={isPro}
 						>
 							<ThemedText
@@ -189,14 +184,92 @@ export const ProfileSettingsScreen: React.FC<ProfileSettingsScreenProps> = ({
 										: styles.subscribeButtonText
 								}
 							>
-								{isPro
-									? "You are subscribed"
-									: `Subscribe - ${item.product.priceString}`}
+								{isPro ? "You are subscribed" : `Subscribe - $4.99`}
 							</ThemedText>
 						</TouchableOpacity>
 					</View>
 				</View>
-			))}
+			) : (
+				offerings?.current?.availablePackages.map((item) => (
+					<View
+						style={styles.content}
+						key={item.identifier}
+					>
+						<View style={styles.proCard}>
+							<View style={styles.proHeader}>
+								<View style={styles.proTitleRow}>
+									<Crown
+										color="#FFD700"
+										size={24}
+										fill="#FFD700"
+									/>
+									<ThemedText
+										variant="bold"
+										style={styles.proTitle}
+									>
+										Premium Subscription
+									</ThemedText>
+								</View>
+								<View style={styles.priceContainer}>
+									<ThemedText
+										style={styles.priceValue}
+										variant="bold"
+									>
+										{item.product.priceString}
+									</ThemedText>
+									<ThemedText style={styles.pricePeriod}>
+										/{item.packageType === "ANNUAL" ? "year" : "month"}
+									</ThemedText>
+								</View>
+							</View>
+							<ThemedText style={styles.proDescription}>
+								Unlock premium features and full access to your health wrapped.
+							</ThemedText>
+							<View style={styles.featuresList}>
+								<View style={styles.featureItem}>
+									<View style={styles.featureBullet} />
+									<ThemedText style={styles.featureText}>
+										View individual month breakdowns
+									</ThemedText>
+								</View>
+								<View style={styles.featureItem}>
+									<View style={styles.featureBullet} />
+									<ThemedText style={styles.featureText}>
+										Access all previous years of data
+									</ThemedText>
+								</View>
+								<View style={styles.featureItem}>
+									<View style={styles.featureBullet} />
+									<ThemedText style={styles.featureText}>
+										Advanced health insights and trends
+									</ThemedText>
+								</View>
+							</View>
+							<TouchableOpacity
+								style={[
+									isPro ? styles.unsubscribeButton : styles.subscribeButton,
+									{ marginBottom: 10 },
+								]}
+								onPress={() => handlePurchase(item)}
+								disabled={isPro}
+							>
+								<ThemedText
+									variant="bold"
+									style={
+										isPro
+											? styles.unsubscribeButtonText
+											: styles.subscribeButtonText
+									}
+								>
+									{isPro
+										? "You are subscribed"
+										: `Subscribe - ${item.product.priceString}`}
+								</ThemedText>
+							</TouchableOpacity>
+						</View>
+					</View>
+				))
+			)}
 
 			<View style={styles.footer}>
 				<TouchableOpacity
