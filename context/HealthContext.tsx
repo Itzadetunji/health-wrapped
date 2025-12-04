@@ -63,13 +63,11 @@ export const HealthProvider = ({ children }: { children: ReactNode }) => {
 	const [selectedMonth, setSelectedMonth] = useState<number | null>(null); // null = full year
 
 	useEffect(() => {
-		Purchases.setLogLevel(Purchases.LOG_LEVEL.DEBUG);
-
-		if (Platform.OS === "ios") {
-			Purchases.configure({ apiKey: "appl_YCLwMgPFWYNCUKxYgEOiOQxWAHM" });
-		}
-
-		getCustomerInfo();
+		// Purchases.setLogLevel(Purchases.LOG_LEVEL.DEBUG);
+		// if (Platform.OS === "ios") {
+		// 	Purchases.configure({ apiKey: "appl_YCLwMgPFWYNCUKxYgEOiOQxWAHM" });
+		// }
+		// getCustomerInfo();
 		// getOfferings();
 	}, []);
 	// test_UcQQRwJVPXUxmGlfsgBojPxMNrH
