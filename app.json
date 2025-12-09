@@ -3,7 +3,7 @@
 		"name": "Health Wrapped",
 		"slug": "health-wrapped",
 		"scheme": "healthwrapped",
-		"version": "1.2.6",
+		"version": "1.2.7",
 		"orientation": "portrait",
 		"icon": "./assets/icon.jpg",
 		"userInterfaceStyle": "light",
@@ -12,7 +12,7 @@
 			"backgroundColor": "#121212"
 		},
 		"ios": {
-			"supportsTablet": false,
+			"supportsTablet": true,
 			"bundleIdentifier": "com.adetunji.healthwrapped",
 			"infoPlist": {
 				"NSHealthShareUsageDescription": "Read health data to track your progress.",
