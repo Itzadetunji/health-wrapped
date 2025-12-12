@@ -87,7 +87,7 @@ export default function Auth() {
 							variant="bold"
 							style={styles.buttonText}
 						>
-							Allow Access
+							Continue
 						</ThemedText>
 					)}
 				</TouchableOpacity>
