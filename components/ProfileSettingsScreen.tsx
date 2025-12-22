@@ -3,12 +3,12 @@ import { ChevronLeft, Crown } from "lucide-react-native";
 import type React from "react";
 import { useEffect, useState } from "react";
 import {
+	Linking,
 	Modal,
 	StyleSheet,
 	Text,
 	TouchableOpacity,
 	View,
-	Linking,
 } from "react-native";
 import type {
 	PurchasesOfferings,

@@ -25,18 +25,18 @@ import {
 	useSafeAreaInsets,
 } from "react-native-safe-area-context";
 import { type HealthData, useHealth } from "../context/HealthContext";
-import { Slide } from "./Slide";
-import { SummarySlide } from "./SummarySlide";
 import {
+	getCaloriesQuote,
+	getExerciseQuote,
+	getFlightsQuote,
+	getSleepQuote,
 	getStepsQuote,
 	getSwimQuote,
-	getCaloriesQuote,
-	getSleepQuote,
-	getFlightsQuote,
-	getExerciseQuote,
 } from "../lib/utils";
-import { ThemedText } from "./ThemedText";
 import { months } from "./LandingScreen";
+import { Slide } from "./Slide";
+import { SummarySlide } from "./SummarySlide";
+import { ThemedText } from "./ThemedText";
 
 const { width } = Dimensions.get("window");
 const SLIDE_DURATION = 5000; // 5 seconds
@@ -162,102 +162,118 @@ export const HealthWrapped: React.FC<HealthWrappedProps> = ({ data }) => {
 
 	const isMonth = selectedMonth !== null;
 
-	const slides: SlideItem[] = [
-		{
-			id: "steps",
-			title: "MOVEMENT",
-			value: data.steps,
-			statLabel: "Steps Taken",
-			gradientColors: ["#121212", "#1a1a1a", "#2C3E50"],
-			icon: (
-				<Footprints
-					size={60}
-					color="#fff"
-				/>
-			),
-			quote: getStepsQuote(data.steps, isMonth),
-			bottomStat: `${(data.steps * 0.0008).toFixed(1)} km traveled`,
-		},
-		{
-			id: "swim",
-			title: "SWIMMING",
-			value: data.swimDistance,
-			statLabel: "Meters Swum",
-			gradientColors: ["#121212", "#1a1a1a", "#1A535C"],
-			icon: (
-				<Waves
-					size={60}
-					color="#fff"
-				/>
-			),
-			quote: getSwimQuote(data.swimDistance, isMonth),
-			bottomStat: `${Math.floor(data.swimDistance / 50)} Olympic laps`,
-		},
-		{
-			id: "calories",
-			title: "ENERGY",
-			value: data.calories,
-			statLabel: "Calories Burned",
-			gradientColors: ["#121212", "#1a1a1a", "#C0392B"],
-			icon: (
-				<Flame
-					size={60}
-					color="#fff"
-				/>
-			),
-			quote: getCaloriesQuote(data.calories, isMonth),
-			bottomStat: "Fueling your journey",
-		},
-		{
-			id: "sleep",
-			title: "REST",
-			value: Math.round(data.sleep),
-			statLabel: "Hours Asleep",
-			gradientColors: ["#121212", "#1a1a1a", "#4A235A"],
-			icon: (
-				<Moon
-					size={60}
-					color="#fff"
-				/>
-			),
-			quote: getSleepQuote(data.sleep, isMonth),
-			bottomStat: `${Math.round(data.sleep / 24)} days spent dreaming`,
-		},
-		{
-			id: "flights",
-			title: "ELEVATION",
-			value: data.flights,
-			statLabel: "Flights Climbed",
-			gradientColors: ["#121212", "#1a1a1a", "#D35400"],
-			icon: (
-				<ArrowUp
-					size={60}
-					color="#fff"
-				/>
-			),
-			quote: getFlightsQuote(data.flights, isMonth),
-			bottomStat: `${data.flights * 3} meters climbed`,
-		},
-		{
-			id: "exercise",
-			title: "WORKOUTS",
-			value: Math.round(data.exercise),
-			statLabel: "Minutes Active",
-			gradientColors: ["#121212", "#1a1a1a", "#27AE60"],
-			icon: (
-				<Dumbbell
-					size={60}
-					color="#fff"
-				/>
-			),
-			quote: getExerciseQuote(data.exercise, isMonth),
-			bottomStat: `${Math.round(data.exercise / 60)} hours of sweat`,
-		},
-		{
-			id: "summary",
-			isSummary: true,
-		},
-	];
+	const getSlides = (): SlideItem[] => {
+		const steps = data.steps || 0;
+		const calories = data.calories || 0;
+		const sleep = data.sleep || 0;
+		const flights = data.flights || 0;
+		const exercise = data.exercise || 0;
+		const swimDistance = data.swimDistance || 0;
+
+		const returnData = [
+			{
+				id: "steps",
+				title: "MOVEMENT",
+				value: steps,
+				statLabel: "Steps Taken",
+				gradientColors: ["#121212", "#1a1a1a", "#2C3E50"],
+				icon: (
+					<Footprints
+						size={60}
+						color="#fff"
+					/>
+				),
+				quote: getStepsQuote(steps, isMonth),
+				bottomStat: `${(steps * 0.0008).toFixed(1)} km traveled`,
+			},
+			{
+				id: "swim",
+				title: "SWIMMING",
+				value: swimDistance,
+				statLabel: "Meters Swum",
+				gradientColors: ["#121212", "#1a1a1a", "#1A535C"],
+				icon: (
+					<Waves
+						size={60}
+						color="#fff"
+					/>
+				),
+				quote: getSwimQuote(swimDistance, isMonth),
+				bottomStat: `${Math.floor(swimDistance / 50)} Olympic laps`,
+			},
+			{
+				id: "calories",
+				title: "ENERGY",
+				value: calories,
+				statLabel: "Calories Burned",
+				gradientColors: ["#121212", "#1a1a1a", "#C0392B"],
+				icon: (
+					<Flame
+						size={60}
+						color="#fff"
+					/>
+				),
+				quote: getCaloriesQuote(calories, isMonth),
+				bottomStat: "Fueling your journey",
+			},
+			{
+				id: "sleep",
+				title: "REST",
+				value: Math.round(sleep),
+				statLabel: "Hours Asleep",
+				gradientColors: ["#121212", "#1a1a1a", "#4A235A"],
+				icon: (
+					<Moon
+						size={60}
+						color="#fff"
+					/>
+				),
+				quote: getSleepQuote(sleep, isMonth),
+				bottomStat: `${Math.round(sleep / 24)} days spent dreaming`,
+			},
+			{
+				id: "flights",
+				title: "ELEVATION",
+				value: flights,
+				statLabel: "Flights Climbed",
+				gradientColors: ["#121212", "#1a1a1a", "#D35400"],
+				icon: (
+					<ArrowUp
+						size={60}
+						color="#fff"
+					/>
+				),
+				quote: getFlightsQuote(flights, isMonth),
+				bottomStat: `${flights * 3} meters climbed`,
+			},
+			{
+				id: "exercise",
+				title: "WORKOUTS",
+				value: Math.round(exercise),
+				statLabel: "Minutes Active",
+				gradientColors: ["#121212", "#1a1a1a", "#27AE60"],
+				icon: (
+					<Dumbbell
+						size={60}
+						color="#fff"
+					/>
+				),
+				quote: getExerciseQuote(exercise, isMonth),
+				bottomStat: `${Math.round(exercise / 60)} hours of sweat`,
+			},
+			{
+				id: "summary",
+				isSummary: true,
+			},
+		] satisfies SlideItem[];
+
+		return returnData.filter((slide) => {
+			if (slide.isSummary) return true;
+			return slide.value > 0;
+		});
+	};
+
+	const slides = getSlides();
 
 	const handleNext = () => {
 		if (currentIndex < slides.length - 1) {
@@ -339,24 +355,25 @@ export const HealthWrapped: React.FC<HealthWrappedProps> = ({ data }) => {
 				delayLongPress={200}
 			>
 				<View style={styles.slideContainer}>
-					{currentSlide.isSummary ? (
-						<SummarySlide
-							data={data}
-							isActive={true}
-						/>
-					) : (
-						<Slide
-							key={currentSlide.id}
-							title={currentSlide.title}
-							value={currentSlide.value}
-							statLabel={currentSlide.statLabel}
-							gradientColors={currentSlide.gradientColors}
-							icon={currentSlide.icon}
-							isActive={true}
-							quote={currentSlide.quote}
-							bottomStat={currentSlide.bottomStat}
-						/>
-					)}
+					{currentSlide &&
+						(currentSlide?.isSummary ? (
+							<SummarySlide
+								data={data}
+								isActive={true}
+							/>
+						) : (
+							<Slide
+								key={currentSlide.id}
+								title={currentSlide.title}
+								value={currentSlide.value}
+								statLabel={currentSlide.statLabel}
+								gradientColors={currentSlide.gradientColors}
+								icon={currentSlide.icon}
+								isActive={true}
+								quote={currentSlide.quote}
+								bottomStat={currentSlide.bottomStat}
+							/>
+						))}
 				</View>
 			</TouchableWithoutFeedback>
 		</SafeAreaProvider>

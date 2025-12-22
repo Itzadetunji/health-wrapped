@@ -11,8 +11,8 @@ import {
 } from "react-native";
 import { captureRef } from "react-native-view-shot";
 import { type HealthData, useHealth } from "../context/HealthContext";
-import { ThemedText } from "./ThemedText";
 import { months } from "./LandingScreen";
+import { ThemedText } from "./ThemedText";
 
 const { width, height } = Dimensions.get("window");
 
@@ -120,95 +120,107 @@ export const SummarySlide: React.FC<SummarySlideProps> = ({
 					</ThemedText>
 
 					<View style={styles.card}>
-						<View style={styles.row}>
-							<ThemedText
-								variant="medium"
-								style={styles.label}
+						{!!data.steps && (
+							<View style={styles.row}>
+								<ThemedText
+									variant="medium"
+									style={styles.label}
+								>
+									Steps
+								</ThemedText>
+								<ThemedText
+									variant="bold"
+									style={styles.value}
+								>
+									{data.steps.toLocaleString()}
+								</ThemedText>
+							</View>
+						)}
+						{!!data.steps && (
+							<View style={styles.row}>
+								<ThemedText
+									variant="medium"
+									style={styles.label}
+								>
+									Distance
+								</ThemedText>
+								<ThemedText
+									variant="bold"
+									style={styles.value}
+								>
+									{(data.steps * 0.0008).toFixed(1)} km
+								</ThemedText>
+							</View>
+						)}
+						{!!data.calories && (
+							<View style={styles.row}>
+								<ThemedText
+									variant="medium"
+									style={styles.label}
+								>
+									Calories
+								</ThemedText>
+								<ThemedText
+									variant="bold"
+									style={styles.value}
+								>
+									{Math.round(data.calories).toLocaleString()} kcal
+								</ThemedText>
+							</View>
+						)}
+						{!!data.sleep && (
+							<View style={styles.row}>
+								<ThemedText
+									variant="medium"
+									style={styles.label}
+								>
+									Sleep
+								</ThemedText>
+								<ThemedText
+									variant="bold"
+									style={styles.value}
+								>
+									{Math.round(data.sleep).toLocaleString()} hrs
+								</ThemedText>
+							</View>
+						)}
+						{!!data.flights && (
+							<View style={styles.row}>
+								<ThemedText
+									variant="medium"
+									style={styles.label}
+								>
+									Flights
+								</ThemedText>
+								<ThemedText
+									variant="bold"
+									style={styles.value}
+								>
+									{data.flights.toLocaleString()}
+								</ThemedText>
+							</View>
+						)}
+						{!!data.exercise && (
+							<View
+								style={[
+									styles.row,
+									{ borderBottomWidth: 0, marginBottom: 0, paddingBottom: 0 },
+								]}
 							>
-								Steps
-							</ThemedText>
-							<ThemedText
-								variant="bold"
-								style={styles.value}
-							>
-								{data.steps.toLocaleString()}
-							</ThemedText>
-						</View>
-						<View style={styles.row}>
-							<ThemedText
-								variant="medium"
-								style={styles.label}
-							>
-								Distance
-							</ThemedText>
-							<ThemedText
-								variant="bold"
-								style={styles.value}
-							>
-								{(data.steps * 0.0008).toFixed(1)} km
-							</ThemedText>
-						</View>
-						<View style={styles.row}>
-							<ThemedText
-								variant="medium"
-								style={styles.label}
-							>
-								Calories
-							</ThemedText>
-							<ThemedText
-								variant="bold"
-								style={styles.value}
-							>
-								{Math.round(data.calories).toLocaleString()} kcal
-							</ThemedText>
-						</View>
-						<View style={styles.row}>
-							<ThemedText
-								variant="medium"
-								style={styles.label}
-							>
-								Sleep
-							</ThemedText>
-							<ThemedText
-								variant="bold"
-								style={styles.value}
-							>
-								{Math.round(data.sleep).toLocaleString()} hrs
-							</ThemedText>
-						</View>
-						<View style={styles.row}>
-							<ThemedText
-								variant="medium"
-								style={styles.label}
-							>
-								Flights
-							</ThemedText>
-							<ThemedText
-								variant="bold"
-								style={styles.value}
-							>
-								{data.flights.toLocaleString()}
-							</ThemedText>
-						</View>
-						<View
-							style={[
-								styles.row,
-								{ borderBottomWidth: 0, marginBottom: 0, paddingBottom: 0 },
-							]}
-						>
-							<ThemedText
-								variant="medium"
-								style={styles.label}
-							>
-								Exercise
-							</ThemedText>
-							<ThemedText
-								variant="bold"
-								style={styles.value}
-							>
-								{Math.round(data.exercise).toLocaleString()} min
-							</ThemedText>
-						</View>
+								<ThemedText
+									variant="medium"
+									style={styles.label}
+								>
+									Exercise
+								</ThemedText>
+								<ThemedText
+									variant="bold"
+									style={styles.value}
+								>
+									{Math.round(data.exercise).toLocaleString()} min
+								</ThemedText>
+							</View>
+						)}
 					</View>
 
 					<ThemedText style={styles.footer}>

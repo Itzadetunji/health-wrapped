@@ -84,7 +84,13 @@ export const LandingScreen: React.FC<LandingScreenProps> = ({
 	const handleViewWrapped = async () => {
 		const data = await fetchDataForYear(selectedYear, selectedMonth);
 
-		if (selectedYear === currentYear && data?.steps === 0) {
+		const allDataIsZero =
+			data &&
+			Object.values(data).every(
+				(value) => typeof value === "number" && value === 0
+			);
+
+		if (allDataIsZero) {
 			return tellUserToEnableHealthPermissions(selectedMonth as number);
 		}
 
