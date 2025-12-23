@@ -120,107 +120,65 @@ export const SummarySlide: React.FC<SummarySlideProps> = ({
 					</ThemedText>
 
 					<View style={styles.card}>
-						{!!data.steps && (
-							<View style={styles.row}>
-								<ThemedText
-									variant="medium"
-									style={styles.label}
+						{[
+							{
+								label: "Steps",
+								value: data.steps.toLocaleString(),
+								show: !!data.steps,
+							},
+							{
+								label: "Distance",
+								value: `${(data.steps * 0.0008).toFixed(1)} km`,
+								show: !!data.steps,
+							},
+							{
+								label: "Calories",
+								value: `${Math.round(data.calories).toLocaleString()} kcal`,
+								show: !!data.calories,
+							},
+							{
+								label: "Sleep",
+								value: `${Math.round(data.sleep).toLocaleString()} hrs`,
+								show: !!data.sleep,
+							},
+							{
+								label: "Flights",
+								value: data.flights.toLocaleString(),
+								show: !!data.flights,
+							},
+							{
+								label: "Exercise",
+								value: `${Math.round(data.exercise).toLocaleString()} min`,
+								show: !!data.exercise,
+							},
+						]
+							.filter((item) => item.show)
+							.map((item, index, array) => (
+								<View
+									key={item.label}
+									style={[
+										styles.row,
+										index === array.length - 1 && {
+											borderBottomWidth: 0,
+											marginBottom: 0,
+											paddingBottom: 0,
+										},
+									]}
 								>
-									Steps
-								</ThemedText>
-								<ThemedText
-									variant="bold"
-									style={styles.value}
-								>
-									{data.steps.toLocaleString()}
-								</ThemedText>
-							</View>
-						)}
-						{!!data.steps && (
-							<View style={styles.row}>
-								<ThemedText
-									variant="medium"
-									style={styles.label}
-								>
-									Distance
-								</ThemedText>
-								<ThemedText
-									variant="bold"
-									style={styles.value}
-								>
-									{(data.steps * 0.0008).toFixed(1)} km
-								</ThemedText>
-							</View>
-						)}
-						{!!data.calories && (
-							<View style={styles.row}>
-								<ThemedText
-									variant="medium"
-									style={styles.label}
-								>
-									Calories
-								</ThemedText>
-								<ThemedText
-									variant="bold"
-									style={styles.value}
-								>
-									{Math.round(data.calories).toLocaleString()} kcal
-								</ThemedText>
-							</View>
-						)}
-						{!!data.sleep && (
-							<View style={styles.row}>
-								<ThemedText
-									variant="medium"
-									style={styles.label}
-								>
-									Sleep
-								</ThemedText>
-								<ThemedText
-									variant="bold"
-									style={styles.value}
-								>
-									{Math.round(data.sleep).toLocaleString()} hrs
-								</ThemedText>
-							</View>
-						)}
-						{!!data.flights && (
-							<View style={styles.row}>
-								<ThemedText
-									variant="medium"
-									style={styles.label}
-								>
-									Flights
-								</ThemedText>
-								<ThemedText
-									variant="bold"
-									style={styles.value}
-								>
-									{data.flights.toLocaleString()}
-								</ThemedText>
-							</View>
-						)}
-						{!!data.exercise && (
-							<View
-								style={[
-									styles.row,
-									{ borderBottomWidth: 0, marginBottom: 0, paddingBottom: 0 },
-								]}
-							>
-								<ThemedText
-									variant="medium"
-									style={styles.label}
-								>
-									Exercise
-								</ThemedText>
-								<ThemedText
-									variant="bold"
-									style={styles.value}
-								>
-									{Math.round(data.exercise).toLocaleString()} min
-								</ThemedText>
-							</View>
-						)}
+									<ThemedText
+										variant="medium"
+										style={styles.label}
+									>
+										{item.label}
+									</ThemedText>
+									<ThemedText
+										variant="bold"
+										style={styles.value}
+									>
+										{item.value}
+									</ThemedText>
+								</View>
+							))}
 					</View>
 
 					<ThemedText style={styles.footer}>
